@@ -403,70 +403,72 @@ const App: React.FC = () => {
           />
         </div>
       ) : (
-        <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
-          {/* 데스크톱: 좌측 패널 */}
-          <div className={`hidden md:block w-[240px] border-r overflow-y-auto custom-scrollbar transition-colors ${
+        <div className="flex-1 flex flex-col overflow-hidden relative">
+          {/* 헤더 - 전체 상단 */}
+          <header className={`h-10 md:h-12 flex items-center justify-between px-3 md:px-4 border-b backdrop-blur-xl z-20 transition-colors ${
             isDarkMode
-              ? 'bg-[#121214] border-zinc-800/50'
-              : 'bg-white border-zinc-200'
+              ? 'border-zinc-800/50 bg-[#09090b]/50'
+              : 'border-zinc-200 bg-white/80'
           }`}>
-            <EditorLeftPanel state={editorState} updateState={updateEditor} isDarkMode={isDarkMode} />
-          </div>
-
-          {/* Hero Preview Section */}
-          <main className={`flex-1 flex flex-col relative transition-colors ${
-            isDarkMode ? 'bg-black' : 'bg-gray-200'
-          }`}>
-            {/* 헤더 */}
-            <header className={`h-10 md:h-12 flex items-center justify-between px-3 md:px-4 border-b backdrop-blur-xl z-20 transition-colors ${
-              isDarkMode
-                ? 'border-zinc-800/50 bg-[#09090b]/50'
-                : 'border-zinc-200 bg-white/80'
-            }`}>
-              {/* 좌측: 모바일 효과 버튼 + 타이틀 */}
-              <div className="flex items-center gap-2 md:gap-3">
-                {/* 모바일: 효과 아이콘 버튼 */}
-                <button
-                  onClick={() => setMobilePanel(mobilePanel === 'left' ? 'none' : 'left')}
-                  className={`md:hidden p-2 rounded-lg transition-all ${
-                    mobilePanel === 'left'
-                      ? 'bg-indigo-600 text-white'
-                      : isDarkMode
-                        ? 'bg-zinc-800/80 text-zinc-400 hover:text-white'
-                        : 'bg-zinc-200 text-zinc-600 hover:text-zinc-900'
-                  }`}
-                >
-                  <Settings2 className="w-5 h-5" />
-                </button>
-                <span className={`hidden sm:inline text-[10px] md:text-[11px] font-black tracking-[0.2em] uppercase ${
-                  isDarkMode ? 'text-zinc-300' : 'text-zinc-600'
-                }`}>Workflow</span>
-                <div className="h-1 w-1 rounded-full bg-indigo-500 animate-pulse" />
-                <span className="text-xs md:text-sm font-bold">Studio Preview</span>
-              </div>
-
-              {/* 우측: 모바일 컬러 버튼 */}
+            {/* 좌측: 모바일 효과 버튼 + 타이틀 */}
+            <div className="flex items-center gap-2 md:gap-3">
+              {/* 모바일: 효과 아이콘 버튼 */}
               <button
-                onClick={() => setMobilePanel(mobilePanel === 'right' ? 'none' : 'right')}
+                onClick={() => setMobilePanel(mobilePanel === 'left' ? 'none' : 'left')}
                 className={`md:hidden p-2 rounded-lg transition-all ${
-                  mobilePanel === 'right'
+                  mobilePanel === 'left'
                     ? 'bg-indigo-600 text-white'
                     : isDarkMode
                       ? 'bg-zinc-800/80 text-zinc-400 hover:text-white'
                       : 'bg-zinc-200 text-zinc-600 hover:text-zinc-900'
                 }`}
               >
-                <Palette className="w-5 h-5" />
+                <Settings2 className="w-5 h-5" />
               </button>
-            </header>
+              <span className={`hidden sm:inline text-[10px] md:text-[11px] font-black tracking-[0.2em] uppercase ${
+                isDarkMode ? 'text-zinc-300' : 'text-zinc-600'
+              }`}>Workflow</span>
+              <div className="h-1 w-1 rounded-full bg-indigo-500 animate-pulse" />
+              <span className="text-xs md:text-sm font-bold">Studio Preview</span>
+            </div>
 
-            {/* 프리뷰 영역 */}
-            <div className="flex-1 p-2 md:p-3 flex flex-col gap-2 md:gap-3 overflow-hidden min-h-0">
-              <div className={`w-full aspect-video max-h-full relative overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] border group ${
-                isDarkMode
-                  ? 'bg-black border-zinc-800/50'
-                  : 'bg-zinc-100 border-zinc-300'
-              }`}>
+            {/* 우측: 모바일 컬러 버튼 */}
+            <button
+              onClick={() => setMobilePanel(mobilePanel === 'right' ? 'none' : 'right')}
+              className={`md:hidden p-2 rounded-lg transition-all ${
+                mobilePanel === 'right'
+                  ? 'bg-indigo-600 text-white'
+                  : isDarkMode
+                    ? 'bg-zinc-800/80 text-zinc-400 hover:text-white'
+                    : 'bg-zinc-200 text-zinc-600 hover:text-zinc-900'
+              }`}
+            >
+              <Palette className="w-5 h-5" />
+            </button>
+          </header>
+
+          {/* 콘텐츠 영역 */}
+          <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
+            {/* 데스크톱: 좌측 패널 */}
+            <div className={`hidden md:block w-[240px] border-r overflow-y-auto custom-scrollbar transition-colors ${
+              isDarkMode
+                ? 'bg-[#121214] border-zinc-800/50'
+                : 'bg-white border-zinc-200'
+            }`}>
+              <EditorLeftPanel state={editorState} updateState={updateEditor} isDarkMode={isDarkMode} />
+            </div>
+
+            {/* Hero Preview Section */}
+            <main className={`flex-1 flex flex-col relative transition-colors ${
+              isDarkMode ? 'bg-black' : 'bg-gray-200'
+            }`}>
+              {/* 프리뷰 영역 */}
+              <div className="flex-1 p-2 md:p-3 flex flex-col gap-2 md:gap-3 overflow-hidden min-h-0">
+                <div className={`w-full aspect-video max-h-full relative overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] border group ${
+                  isDarkMode
+                    ? 'bg-black border-zinc-800/50'
+                    : 'bg-zinc-100 border-zinc-300'
+                }`}>
                 <VisualizerPreview
                   state={editorState}
                   assets={{
@@ -589,13 +591,14 @@ const App: React.FC = () => {
 
           </main>
 
-          {/* 데스크톱: 우측 패널 */}
-          <div className={`hidden md:block w-[240px] border-l overflow-y-auto custom-scrollbar transition-colors ${
-            isDarkMode
-              ? 'bg-[#121214] border-zinc-800/50'
-              : 'bg-white border-zinc-200'
-          }`}>
-            <EditorRightPanel state={editorState} updateState={updateEditor} isDarkMode={isDarkMode} />
+            {/* 데스크톱: 우측 패널 */}
+            <div className={`hidden md:block w-[240px] border-l overflow-y-auto custom-scrollbar transition-colors ${
+              isDarkMode
+                ? 'bg-[#121214] border-zinc-800/50'
+                : 'bg-white border-zinc-200'
+            }`}>
+              <EditorRightPanel state={editorState} updateState={updateEditor} isDarkMode={isDarkMode} />
+            </div>
           </div>
 
           {/* 모바일: 슬라이드 패널 */}
