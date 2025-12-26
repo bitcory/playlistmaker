@@ -1,0 +1,7 @@
+{
+  "name": "Spectrum Studio - Pro Visualizer",
+  "description": "A professional audio visualization and video editing suite for creating stunning YouTube music content.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
