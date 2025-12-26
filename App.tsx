@@ -461,10 +461,10 @@ const App: React.FC = () => {
             </header>
 
             {/* 프리뷰 영역 */}
-            <div className="flex-1 p-2 md:p-3 flex flex-col gap-2 md:gap-3 overflow-hidden">
-              <div className={`flex-1 relative overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] border group ${
+            <div className="flex-1 p-2 md:p-3 flex flex-col gap-2 md:gap-3 overflow-hidden min-h-0">
+              <div className={`w-full aspect-video max-h-full relative overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.5)] border group ${
                 isDarkMode
-                  ? 'bg-zinc-900/50 border-zinc-800/50'
+                  ? 'bg-black border-zinc-800/50'
                   : 'bg-zinc-100 border-zinc-300'
               }`}>
                 <VisualizerPreview

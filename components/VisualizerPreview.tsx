@@ -658,7 +658,7 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
         });
       } else if (dragRef.current.type === 'resize') {
         const pixelDelta = e.clientX - dragRef.current.startX;
-        const scale = rect.width / 1280;
+        const scale = rect.width / 1920;
         updateState('logoSize', Math.max(20, Math.min(1000, dragRef.current.initialSize + (pixelDelta / scale))));
       }
     };
@@ -1507,15 +1507,15 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
     return () => cancelAnimationFrame(animationFrameId);
   }, [state, analyser, dataArray, logoAspectRatio, bgImageLoaded, logoImageLoaded]);
 
-  const currentScale = canvasRect.width / 1280;
+  const currentScale = canvasRect.width / 1920;
 
   return (
     <div ref={containerRef} className="w-full h-full relative select-none overflow-hidden">
       <canvas
         ref={canvasRef}
-        width={1280}
-        height={720}
-        className="w-full h-full object-cover z-0"
+        width={1920}
+        height={1080}
+        className="w-full h-full object-contain z-0"
       />
       
       {/* 로고가 있을 때만 드래그 UI 표시 */}

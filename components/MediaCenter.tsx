@@ -178,11 +178,21 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
         <button
           onClick={onEnterStudio}
           disabled={assets.audioTracks.length === 0}
-          className="px-4 md:px-6 py-2 md:py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:bg-zinc-800/50 disabled:text-zinc-600 disabled:cursor-not-allowed text-white rounded-full font-black text-[10px] md:text-[11px] tracking-wider md:tracking-widest shadow-lg transition-all active:scale-[0.98] flex items-center gap-2 md:gap-3 group"
+          className={`
+            relative overflow-hidden px-5 md:px-8 py-2.5 md:py-3 rounded-xl font-bold text-xs md:text-sm
+            transition-all duration-300 active:scale-[0.97] flex items-center gap-2 md:gap-3 group
+            ${assets.audioTracks.length === 0
+              ? 'bg-zinc-800/60 text-zinc-500 cursor-not-allowed border border-zinc-700/50'
+              : 'bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 bg-[length:200%_100%] hover:bg-right text-white shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:scale-105 border border-indigo-400/30'
+            }
+          `}
         >
-          <span className="hidden sm:inline">스튜디오 입장하기</span>
-          <span className="sm:hidden">스튜디오</span>
-          <ArrowRight className="w-3 md:w-3.5 h-3 md:h-3.5 stroke-[3] group-hover:translate-x-1 transition-transform" />
+          {assets.audioTracks.length > 0 && (
+            <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+          )}
+          <span className="relative hidden sm:inline">스튜디오 입장하기</span>
+          <span className="relative sm:hidden">스튜디오</span>
+          <ArrowRight className="relative w-4 h-4 stroke-[2.5] group-hover:translate-x-1 transition-transform" />
         </button>
       </header>
 
