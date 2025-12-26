@@ -163,9 +163,9 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
               isDarkMode ? 'bg-pink-500 text-white' : 'bg-pink-400 text-black'
             }`}
             style={{ borderWidth: '2px' }}
-          >PROJECT</span>
+          >프로젝트</span>
           <div className="h-2.5 w-2.5 rounded-sm bg-lime-400 border-2 border-black" />
-          <span className="text-sm md:text-base font-black uppercase">Media Center</span>
+          <span className="text-sm md:text-base font-black uppercase">미디어 센터</span>
         </div>
 
         <button
@@ -181,8 +181,8 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
           `}
           style={{ borderWidth: '3px' }}
         >
-          <span className="hidden sm:inline">Enter Studio</span>
-          <span className="sm:hidden">Studio</span>
+          <span className="hidden sm:inline">스튜디오 입장</span>
+          <span className="sm:hidden">스튜디오</span>
           <ArrowRight className="w-5 h-5 stroke-[2.5]" />
         </button>
       </header>
@@ -197,7 +197,7 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
               <div className="flex items-center gap-3 mb-4 md:mb-5">
                 <span
                   className="text-xs md:text-sm font-black uppercase tracking-widest px-3 py-1.5 bg-violet-500 text-white rounded border-2 border-black"
-                >01. VISUAL</span>
+                >01. 비주얼</span>
                 <span className="h-[3px] flex-1 bg-black" />
               </div>
 
@@ -205,7 +205,7 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
                 {/* 배경 이미지 - 네오브루탈 */}
                 <div className="space-y-2 md:space-y-3">
                   <div className="flex justify-between items-center px-1">
-                    <label className="text-xs md:text-sm font-black uppercase">BACKGROUND</label>
+                    <label className="text-xs md:text-sm font-black uppercase">배경 이미지</label>
                     <span
                       className="text-xs md:text-sm font-black uppercase px-3 py-1.5 bg-cyan-400 text-black rounded border-2 border-black"
                     >16:9 HD</span>
@@ -222,18 +222,18 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center">
                         <ImageIcon className={`w-10 md:w-12 h-10 md:h-12 mb-2 ${isDarkMode ? 'text-zinc-600' : 'text-zinc-300'}`} />
-                        <span className="text-xs md:text-sm font-black uppercase tracking-widest">UPLOAD</span>
+                        <span className="text-xs md:text-sm font-black uppercase tracking-widest">업로드</span>
                       </div>
                     )}
                     <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                      <span className="px-4 md:px-5 py-2 md:py-2.5 bg-lime-400 text-black text-xs md:text-sm font-black rounded border-2 border-black uppercase">CHANGE</span>
+                      <span className="px-4 md:px-5 py-2 md:py-2.5 bg-lime-400 text-black text-xs md:text-sm font-black rounded border-2 border-black uppercase">변경</span>
                     </div>
                   </div>
                 </div>
 
                 {/* 로고 - 네오브루탈 */}
                 <div className="space-y-2 md:space-y-3">
-                  <label className="text-xs md:text-sm font-black uppercase px-1">BRAND LOGO</label>
+                  <label className="text-xs md:text-sm font-black uppercase px-1">브랜드 로고</label>
                   <div
                     className={`flex gap-4 md:gap-5 p-4 md:p-5 items-center rounded-lg border-black ${
                       isDarkMode ? 'bg-zinc-800' : 'bg-white'
@@ -254,14 +254,14 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
                           <Settings2 className={`w-6 md:w-8 h-6 md:h-8 ${isDarkMode ? 'text-zinc-700' : 'text-zinc-400'}`} />
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none text-white text-xs md:text-sm font-black uppercase">EDIT</div>
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none text-white text-xs md:text-sm font-black uppercase">편집</div>
                     </div>
                     <div className="flex-1 space-y-1.5 md:space-y-2 min-w-0">
-                      <p className="text-sm md:text-base font-black">Brand Symbol</p>
-                      <p className={`text-xs md:text-sm font-medium ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>PNG Transparent</p>
+                      <p className="text-sm md:text-base font-black">브랜드 심볼</p>
+                      <p className={`text-xs md:text-sm font-medium ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>PNG 투명 배경</p>
                       <button
                         className="text-xs md:text-sm font-black uppercase px-3 py-1.5 bg-rose-500 text-white rounded border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
-                      >RESET</button>
+                      >초기화</button>
                     </div>
                   </div>
                 </div>
@@ -275,7 +275,7 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
               <div className="flex items-center gap-3 mb-4 md:mb-5">
                 <span
                   className="text-xs md:text-sm font-black uppercase tracking-widest px-3 py-1.5 bg-cyan-500 text-white rounded border-2 border-black"
-                >02. AUDIO</span>
+                >02. 오디오</span>
                 <div className="flex items-center gap-2 flex-1">
                   {assets.audioTracks.length > 0 && (
                     <button
@@ -288,7 +288,7 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
                       style={{ borderWidth: '2px' }}
                     >
                       {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                      {copied ? 'COPIED!' : 'TIMELINE'}
+                      {copied ? '복사됨!' : '타임라인'}
                     </button>
                   )}
                   <span className="h-[3px] flex-1 bg-black" />
@@ -308,7 +308,7 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
                     } group-hover:bg-lime-100`}
                   >
                     <CloudUpload className={`w-8 md:w-10 h-8 md:h-10 mx-auto mb-2 md:mb-3 ${isDarkMode ? 'text-zinc-500' : 'text-zinc-400'}`} />
-                    <p className="text-sm md:text-base font-black uppercase tracking-[0.15em]">ADD TRACKS</p>
+                    <p className="text-sm md:text-base font-black uppercase tracking-[0.15em]">트랙 추가</p>
                     <p className={`text-xs md:text-sm mt-1 uppercase font-bold ${isDarkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>WAV, MP3, FLAC</p>
                   </div>
                 </div>
@@ -387,7 +387,7 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
                         isDarkMode ? 'bg-zinc-800' : 'bg-white'
                       }`}
                     >
-                      <p className="text-xs md:text-sm font-black uppercase tracking-[0.2em]">NO TRACKS</p>
+                      <p className="text-xs md:text-sm font-black uppercase tracking-[0.2em]">트랙 없음</p>
                     </div>
                   )}
                 </div>
@@ -401,7 +401,7 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
                     style={{ borderWidth: '2px' }}
                   >
                     <span className="text-xs md:text-sm font-black">
-                      {assets.audioTracks.length} TRACKS
+                      {assets.audioTracks.length}개 트랙
                     </span>
                     <span className="text-sm md:text-base font-black tabular-nums px-3 py-1 bg-lime-400 text-black rounded border-2 border-black">
                       {formatTime(getTotalDuration())}
@@ -418,7 +418,7 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
               <div className="flex items-center gap-3 mb-4 md:mb-5">
                 <span
                   className="text-xs md:text-sm font-black uppercase tracking-widest px-3 py-1.5 bg-amber-500 text-black rounded border-2 border-black"
-                >03. ENCODE</span>
+                >03. 인코딩</span>
                 <span className="h-[3px] flex-1 bg-black" />
               </div>
 
@@ -431,7 +431,7 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Settings2 className="w-4 md:w-5 h-4 md:h-5 text-indigo-500" />
-                    <h4 className="text-xs md:text-sm font-black uppercase tracking-wider">OUTPUT PRESET</h4>
+                    <h4 className="text-xs md:text-sm font-black uppercase tracking-wider">출력 설정</h4>
                   </div>
                   <span className="text-xs md:text-sm font-black uppercase px-2 py-1 bg-zinc-200 rounded border-2 border-black">V4.1</span>
                 </div>
@@ -445,8 +445,8 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
                     style={{ borderWidth: '2px' }}
                   >
                     <div className="flex justify-between items-center">
-                      <label className="text-xs md:text-sm font-black uppercase">VIDEO REPEAT</label>
-                      <span className="px-2 py-1 bg-indigo-500 text-white text-xs md:text-sm font-black rounded border-2 border-black">{assets.repeatCount}X</span>
+                      <label className="text-xs md:text-sm font-black uppercase">영상 반복</label>
+                      <span className="px-2 py-1 bg-indigo-500 text-white text-xs md:text-sm font-black rounded border-2 border-black">{assets.repeatCount}회</span>
                     </div>
                     <div className="flex gap-3">
                       {[1, 2, 3].map(count => (
@@ -462,7 +462,7 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
                           }`}
                           style={{ borderWidth: '2px' }}
                         >
-                          {count}X
+                          {count}회
                         </button>
                       ))}
                     </div>
@@ -476,7 +476,7 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
                     style={{ borderWidth: '2px' }}
                   >
                     <div className="flex justify-between items-center">
-                      <label className="text-xs md:text-sm font-black uppercase">AUDIO BITRATE</label>
+                      <label className="text-xs md:text-sm font-black uppercase">오디오 비트레이트</label>
                       <span className="px-2 py-1 bg-lime-400 text-black text-xs md:text-sm font-black rounded border-2 border-black">{assets.bitrate.toUpperCase()}</span>
                     </div>
                     <div className="flex gap-3">
@@ -506,8 +506,8 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
                     style={{ borderWidth: '2px' }}
                   >
                     <div>
-                      <p className="text-sm md:text-base font-black uppercase">GPU ACCEL</p>
-                      <p className="text-xs md:text-sm font-bold mt-0.5">Hardware Render</p>
+                      <p className="text-sm md:text-base font-black uppercase">GPU 가속</p>
+                      <p className="text-xs md:text-sm font-bold mt-0.5">하드웨어 렌더링</p>
                     </div>
                     <div
                       className="w-12 h-7 bg-white rounded border-2 border-black relative shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
@@ -530,10 +530,10 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
         }`}
       >
         <div className="flex gap-4">
-          <span className="text-xs font-black uppercase px-3 py-1.5 bg-lime-400 text-black rounded border-2 border-black">READY</span>
+          <span className="text-xs font-black uppercase px-3 py-1.5 bg-lime-400 text-black rounded border-2 border-black">준비됨</span>
           <span className="text-xs font-black uppercase px-3 py-1.5 bg-cyan-400 text-black rounded border-2 border-black">V4.1.0</span>
         </div>
-        <p className="text-xs font-black uppercase tracking-[0.3em]">SPECTRUM VISUALIZER</p>
+        <p className="text-xs font-black uppercase tracking-[0.3em]">스펙트럼 비주얼라이저</p>
       </footer>
     </div>
   );
