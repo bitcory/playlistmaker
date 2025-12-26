@@ -266,63 +266,64 @@ const ExportModal: React.FC<ExportModalProps> = ({
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // 진행 중 화면 (녹화/처리)
+  // 진행 중 화면 (녹화/처리) - 네오브루탈
   if (status === 'preparing' || status === 'recording' || status === 'processing') {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="absolute inset-0 bg-[#0a0a0f]/95 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-black/80" />
 
-        <div className="relative w-full max-w-md text-center space-y-6 px-6">
+        <div
+          className="relative w-full max-w-md bg-white rounded-lg p-6 text-center space-y-6 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
+          style={{ borderWidth: '4px' }}
+        >
           {/* 아이콘 */}
-          <div className="w-20 h-20 mx-auto rounded-2xl bg-indigo-600/20 flex items-center justify-center">
-            <Clapperboard className="w-10 h-10 text-indigo-400" />
+          <div className="w-20 h-20 mx-auto rounded-lg bg-violet-500 flex items-center justify-center border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+            <Clapperboard className="w-10 h-10 text-white" />
           </div>
 
           {/* 타이틀 */}
           <div>
-            <h2 className="text-3xl font-black text-white mb-2">내보내기(WebM)</h2>
-            <p className="text-zinc-400 text-sm">
-              VP9/Opus 코덱을 사용하여 고품질 영상을 제작합니다.
-            </p>
+            <h2 className="text-2xl font-black text-black uppercase mb-2">EXPORTING</h2>
+            <p className="text-zinc-600 text-sm font-bold">VP9/Opus Codec</p>
           </div>
 
           {/* 상태 */}
-          <div className="pt-4">
-            <div className="flex items-center justify-between mb-2">
+          <div className="pt-2">
+            <div className="flex items-center justify-between mb-3">
               <div className="text-left">
-                <p className="text-xs text-indigo-400 font-medium">상태</p>
-                <p className="text-white text-sm">
+                <p className="text-xs text-violet-600 font-black uppercase">STATUS</p>
+                <p className="text-black text-sm font-bold">
                   {statusMessage}
                   {status === 'recording' && repeatCount > 1 && ` (${currentRepeat}/${repeatCount})`}
                 </p>
               </div>
-              <span className="text-4xl font-black text-white">{Math.round(progress)}%</span>
+              <span className="text-4xl font-black text-black px-3 py-1 bg-lime-400 rounded border-2 border-black">{Math.round(progress)}%</span>
             </div>
 
-            {/* 진행률 바 */}
-            <div className="h-1.5 rounded-full overflow-hidden bg-zinc-800">
+            {/* 진행률 바 - 네오브루탈 */}
+            <div className="h-4 rounded border-2 border-black overflow-hidden bg-zinc-200">
               <div
-                className="h-full bg-indigo-500 transition-all duration-300"
+                className="h-full bg-gradient-to-r from-cyan-400 to-violet-500 transition-all duration-300"
                 style={{ width: `${progress}%` }}
               />
             </div>
           </div>
 
           {/* 버튼들 */}
-          <div className="space-y-3 pt-4">
+          <div className="space-y-3 pt-2">
             <button
               disabled
-              className="w-full py-4 rounded-xl font-bold flex items-center justify-center gap-3 bg-indigo-600/50 text-indigo-200 cursor-not-allowed"
+              className="w-full py-4 rounded-lg font-black uppercase flex items-center justify-center gap-3 bg-zinc-300 text-zinc-500 cursor-not-allowed border-2 border-black"
             >
-              <Rocket className="w-5 h-5" />
-              {status === 'processing' ? '파일 생성 중...' : '녹화 진행 중...'}
+              <Loader2 className="w-5 h-5 animate-spin" />
+              {status === 'processing' ? 'PROCESSING...' : 'RECORDING...'}
             </button>
 
             <button
               onClick={handleCancel}
-              className="w-full py-3 rounded-xl font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors"
+              className="w-full py-3 rounded-lg font-black uppercase text-zinc-600 hover:bg-zinc-100 border-2 border-black transition-colors"
             >
-              편집 스튜디오로 돌아가기
+              CANCEL
             </button>
           </div>
         </div>
@@ -330,59 +331,67 @@ const ExportModal: React.FC<ExportModalProps> = ({
     );
   }
 
-  // 완료 화면
+  // 완료 화면 - 네오브루탈
   if (status === 'complete') {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="absolute inset-0 bg-[#0a0a0f]/95 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-black/80" />
 
-        <div className="relative w-full max-w-md text-center space-y-6 px-6">
-          <CheckCircle className="w-20 h-20 mx-auto text-green-500" />
+        <div
+          className="relative w-full max-w-md bg-lime-400 rounded-lg p-6 text-center space-y-6 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
+          style={{ borderWidth: '4px' }}
+        >
+          <div className="w-20 h-20 mx-auto rounded-lg bg-white flex items-center justify-center border-4 border-black">
+            <CheckCircle className="w-12 h-12 text-lime-600" />
+          </div>
 
           <div>
-            <h2 className="text-3xl font-black text-white mb-2">내보내기 완료!</h2>
-            <p className="text-zinc-400 text-sm">
-              WebM 영상이 다운로드되었습니다.
-            </p>
+            <h2 className="text-2xl font-black text-black uppercase mb-2">COMPLETE!</h2>
+            <p className="text-black/70 text-sm font-bold">WebM 영상이 다운로드되었습니다.</p>
           </div>
 
           <button
             onClick={handleCancel}
-            className="w-full py-4 rounded-xl font-bold bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
+            className="w-full py-4 rounded-lg font-black uppercase bg-black text-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,0.3)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,0.3)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
           >
-            편집 스튜디오로 돌아가기
+            BACK TO STUDIO
           </button>
         </div>
       </div>
     );
   }
 
-  // 에러 화면
+  // 에러 화면 - 네오브루탈
   if (status === 'error') {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="absolute inset-0 bg-[#0a0a0f]/95 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-black/80" />
 
-        <div className="relative w-full max-w-md text-center space-y-6 px-6">
-          <AlertCircle className="w-20 h-20 mx-auto text-red-500" />
+        <div
+          className="relative w-full max-w-md bg-rose-500 rounded-lg p-6 text-center space-y-6 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]"
+          style={{ borderWidth: '4px' }}
+        >
+          <div className="w-20 h-20 mx-auto rounded-lg bg-white flex items-center justify-center border-4 border-black">
+            <AlertCircle className="w-12 h-12 text-rose-600" />
+          </div>
 
           <div>
-            <h2 className="text-3xl font-black text-white mb-2">오류 발생</h2>
-            <p className="text-zinc-400 text-sm">{errorMessage}</p>
+            <h2 className="text-2xl font-black text-white uppercase mb-2">ERROR</h2>
+            <p className="text-white/90 text-sm font-bold">{errorMessage}</p>
           </div>
 
           <div className="space-y-3">
             <button
               onClick={() => setStatus('idle')}
-              className="w-full py-4 rounded-xl font-bold bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
+              className="w-full py-4 rounded-lg font-black uppercase bg-white text-black border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
             >
-              다시 시도
+              RETRY
             </button>
             <button
               onClick={handleCancel}
-              className="w-full py-3 rounded-xl font-medium text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-colors"
+              className="w-full py-3 rounded-lg font-black uppercase text-white/80 hover:text-white border-2 border-white/50 hover:border-white transition-colors"
             >
-              편집 스튜디오로 돌아가기
+              CANCEL
             </button>
           </div>
         </div>
@@ -390,145 +399,128 @@ const ExportModal: React.FC<ExportModalProps> = ({
     );
   }
 
-  // 초기 설정 화면
+  // 초기 설정 화면 - 네오브루탈
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
-        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/70"
         onClick={handleCancel}
       />
 
-      <div className={`relative w-full max-w-md rounded-2xl shadow-2xl transition-colors ${
-        isDarkMode ? 'bg-[#18181b]' : 'bg-white'
-      }`}>
-        {/* 헤더 */}
-        <div className={`flex items-center justify-between p-4 border-b ${
-          isDarkMode ? 'border-zinc-800' : 'border-zinc-200'
-        }`}>
+      <div
+        className={`relative w-full max-w-md rounded-lg overflow-hidden border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] ${
+          isDarkMode ? 'bg-zinc-800' : 'bg-white'
+        }`}
+        style={{ borderWidth: '4px' }}
+      >
+        {/* 헤더 - 네오브루탈 */}
+        <div className="flex items-center justify-between p-4 bg-cyan-500 border-b-4 border-black">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-indigo-600/20 flex items-center justify-center">
-              <Clapperboard className="w-5 h-5 text-indigo-400" />
+            <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center border-2 border-black">
+              <Clapperboard className="w-5 h-5 text-cyan-600" />
             </div>
             <div>
-              <h2 className="text-lg font-bold">내보내기 (WebM)</h2>
-              <p className={`text-xs ${isDarkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>
-                VP9/Opus 코덱
-              </p>
+              <h2 className="text-lg font-black text-white uppercase">EXPORT</h2>
+              <p className="text-xs text-white/80 font-bold">WebM / VP9</p>
             </div>
           </div>
           <button
             onClick={handleCancel}
-            className={`p-2 rounded-lg transition-colors ${
-              isDarkMode ? 'hover:bg-zinc-800' : 'hover:bg-zinc-100'
-            }`}
+            className="p-2 rounded bg-white text-black border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* 본문 */}
-        <div className="p-6 space-y-5">
-          {/* 파일 정보 */}
-          <div className={`p-4 rounded-xl ${
-            isDarkMode ? 'bg-zinc-900' : 'bg-zinc-100'
-          }`}>
+        <div className="p-5 space-y-4">
+          {/* 파일 정보 - 네오브루탈 */}
+          <div
+            className={`p-4 rounded-lg border-black ${isDarkMode ? 'bg-zinc-700' : 'bg-zinc-100'}`}
+            style={{ borderWidth: '2px' }}
+          >
             <div className="flex justify-between items-center mb-2">
-              <span className={`text-sm ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                오디오 파일
-              </span>
-              <span className="text-sm font-medium truncate max-w-[200px]">
-                {audioFile?.name || '없음'}
-              </span>
+              <span className="text-xs font-black uppercase">FILE</span>
+              <span className="text-xs font-bold truncate max-w-[180px]">{audioFile?.name || 'NONE'}</span>
             </div>
             <div className="flex justify-between items-center mb-2">
-              <span className={`text-sm ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                총 길이
-              </span>
-              <span className="text-sm font-medium">
-                {formatDuration(totalDuration)} {repeatCount > 1 && `(${repeatCount}회 반복)`}
+              <span className="text-xs font-black uppercase">LENGTH</span>
+              <span className="text-xs font-bold">
+                {formatDuration(totalDuration)} {repeatCount > 1 && `(x${repeatCount})`}
               </span>
             </div>
             <div className="flex justify-between items-center">
-              <span className={`text-sm ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                오디오 비트레이트
-              </span>
-              <span className="text-sm font-medium">{audioBitrate}</span>
+              <span className="text-xs font-black uppercase">BITRATE</span>
+              <span className="text-xs font-bold">{audioBitrate}</span>
             </div>
           </div>
 
-          {/* 해상도 선택 */}
+          {/* 해상도 선택 - 네오브루탈 */}
           <div>
-            <label className={`block text-sm font-medium mb-2 ${
-              isDarkMode ? 'text-zinc-300' : 'text-zinc-700'
-            }`}>
-              해상도
-            </label>
+            <label className="block text-xs font-black uppercase mb-2">RESOLUTION</label>
             <div className="grid grid-cols-2 gap-2">
               {(['720p', '1080p'] as const).map((res) => (
                 <button
                   key={res}
                   onClick={() => setResolution(res)}
-                  className={`py-2.5 px-4 rounded-xl text-sm font-medium transition-all ${
+                  className={`py-2.5 px-4 rounded-lg text-xs font-black uppercase transition-all border-black ${
                     resolution === res
-                      ? 'bg-indigo-600 text-white'
+                      ? 'bg-violet-500 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]'
                       : isDarkMode
-                        ? 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
-                        : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200'
+                        ? 'bg-zinc-600 text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-violet-500'
+                        : 'bg-white text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-violet-100'
                   }`}
+                  style={{ borderWidth: '2px' }}
                 >
-                  {res === '720p' ? '720p (HD)' : '1080p (Full HD)'}
+                  {res === '720p' ? '720p HD' : '1080p FHD'}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* 품질 선택 */}
+          {/* 품질 선택 - 네오브루탈 */}
           <div>
-            <label className={`block text-sm font-medium mb-2 ${
-              isDarkMode ? 'text-zinc-300' : 'text-zinc-700'
-            }`}>
-              품질
-            </label>
+            <label className="block text-xs font-black uppercase mb-2">QUALITY</label>
             <div className="grid grid-cols-2 gap-2">
               {(['standard', 'high'] as const).map((q) => (
                 <button
                   key={q}
                   onClick={() => setQuality(q)}
-                  className={`py-2.5 px-4 rounded-xl text-sm font-medium transition-all ${
+                  className={`py-2.5 px-4 rounded-lg text-xs font-black uppercase transition-all border-black ${
                     quality === q
-                      ? 'bg-indigo-600 text-white'
+                      ? 'bg-pink-500 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]'
                       : isDarkMode
-                        ? 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
-                        : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200'
+                        ? 'bg-zinc-600 text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-pink-500'
+                        : 'bg-white text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-pink-100'
                   }`}
+                  style={{ borderWidth: '2px' }}
                 >
-                  {q === 'standard' ? '표준 (30fps)' : '고화질 (60fps)'}
+                  {q === 'standard' ? '30 FPS' : '60 FPS'}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* 알림 */}
-          <div className={`p-3 rounded-xl text-xs ${
-            isDarkMode ? 'bg-amber-900/30 text-amber-300' : 'bg-amber-50 text-amber-700'
-          }`}>
-            내보내기 중에는 오디오가 재생됩니다. 브라우저 탭을 닫지 마세요.
+          {/* 알림 - 네오브루탈 */}
+          <div
+            className="p-3 rounded-lg text-xs font-bold bg-amber-400 text-black border-2 border-black"
+          >
+            내보내기 중에는 오디오가 재생됩니다. 탭을 닫지 마세요!
           </div>
 
-          {/* 내보내기 버튼 */}
+          {/* 내보내기 버튼 - 네오브루탈 */}
           <button
             onClick={handleExport}
             disabled={!audioFile || duration <= 0}
-            className={`w-full py-4 rounded-xl font-bold flex items-center justify-center gap-3 transition-all ${
+            className={`w-full py-4 rounded-lg font-black uppercase flex items-center justify-center gap-3 transition-all border-black ${
               audioFile && duration > 0
-                ? 'bg-indigo-600 text-white hover:bg-indigo-700'
-                : isDarkMode
-                  ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed'
-                  : 'bg-zinc-200 text-zinc-400 cursor-not-allowed'
+                ? 'bg-lime-400 text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px]'
+                : 'bg-zinc-300 text-zinc-500 cursor-not-allowed'
             }`}
+            style={{ borderWidth: '3px' }}
           >
             <Download className="w-5 h-5" />
-            WebM 내보내기 시작
+            START EXPORT
           </button>
         </div>
       </div>

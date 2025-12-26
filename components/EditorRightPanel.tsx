@@ -16,7 +16,7 @@ interface EditorRightPanelProps {
   isDarkMode?: boolean;
 }
 
-// 접을 수 있는 섹션 컴포넌트
+// 접을 수 있는 섹션 컴포넌트 - 네오브루탈 스타일
 const CollapsibleSection: React.FC<{
   title: string;
   isOpen: boolean;
@@ -24,20 +24,31 @@ const CollapsibleSection: React.FC<{
   children: React.ReactNode;
   isDarkMode?: boolean;
 }> = ({ title, isOpen, onToggle, children, isDarkMode = true }) => (
-  <section className={`border rounded-xl overflow-hidden ${isDarkMode ? 'border-zinc-800' : 'border-zinc-200'}`}>
+  <section
+    className={`rounded-lg overflow-hidden border-black ${
+      isDarkMode ? 'bg-zinc-800' : 'bg-white'
+    }`}
+    style={{ borderWidth: '2px' }}
+  >
     <button
       onClick={onToggle}
-      className={`w-full flex items-center justify-between p-4 transition-colors ${
-        isDarkMode ? 'hover:bg-zinc-900/50' : 'hover:bg-zinc-100'
+      className={`w-full flex items-center justify-between px-4 py-3 transition-colors ${
+        isOpen
+          ? isDarkMode ? 'bg-cyan-600' : 'bg-cyan-400'
+          : isDarkMode ? 'bg-zinc-700 hover:bg-zinc-600' : 'bg-zinc-100 hover:bg-zinc-200'
       }`}
     >
-      <h3 className={`text-[10px] font-bold uppercase tracking-widest ${isDarkMode ? 'text-zinc-200' : 'text-zinc-700'}`}>{title}</h3>
+      <h3 className={`text-base font-black uppercase tracking-wide ${
+        isOpen ? 'text-white' : isDarkMode ? 'text-zinc-200' : 'text-zinc-700'
+      }`}>{title}</h3>
       <ChevronDown
-        className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${isDarkMode ? 'text-zinc-500' : 'text-zinc-400'}`}
+        className={`w-5 h-5 flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${
+          isOpen ? 'text-white' : isDarkMode ? 'text-zinc-400' : 'text-zinc-500'
+        }`}
       />
     </button>
     <div className={`overflow-hidden transition-all duration-200 ${isOpen ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}>
-      <div className="p-4 pt-0 space-y-4">
+      <div className="p-4 space-y-4">
         {children}
       </div>
     </div>
@@ -59,7 +70,7 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
   };
 
   return (
-    <div className="p-4 space-y-3 overflow-y-auto">
+    <div className="p-4 space-y-4 overflow-y-auto">
       {/* 채널 로고 배치 섹션 */}
       <CollapsibleSection
         title="채널 로고 배치"
@@ -69,11 +80,11 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
       >
         <div className="space-y-4">
           {/* X/Y 위치 */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             <div>
               <div className="flex justify-between mb-2">
-                <label className="text-[9px] text-zinc-300 font-medium">X 위치</label>
-                <span className="text-[9px] text-indigo-400 font-bold">{Math.round(state.logoPos.x)}%</span>
+                <label className={`text-sm font-bold ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>X 위치</label>
+                <span className="text-sm text-indigo-400 font-black">{Math.round(state.logoPos.x)}%</span>
               </div>
               <input
                 type="range"
@@ -81,13 +92,13 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
                 max="100"
                 value={Math.round(state.logoPos.x)}
                 onChange={(e) => updateState('logoPos', { ...state.logoPos, x: Number(e.target.value) })}
-                className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
               />
             </div>
             <div>
               <div className="flex justify-between mb-2">
-                <label className="text-[9px] text-zinc-300 font-medium">Y 위치</label>
-                <span className="text-[9px] text-indigo-400 font-bold">{Math.round(state.logoPos.y)}%</span>
+                <label className={`text-sm font-bold ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>Y 위치</label>
+                <span className="text-sm text-indigo-400 font-black">{Math.round(state.logoPos.y)}%</span>
               </div>
               <input
                 type="range"
@@ -95,7 +106,7 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
                 max="100"
                 value={Math.round(state.logoPos.y)}
                 onChange={(e) => updateState('logoPos', { ...state.logoPos, y: Number(e.target.value) })}
-                className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
               />
             </div>
           </div>
@@ -103,8 +114,8 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
           {/* 로고 크기 */}
           <div>
             <div className="flex justify-between mb-2">
-              <label className="text-[9px] text-zinc-300 font-medium">로고 크기</label>
-              <span className="text-[9px] text-indigo-400 font-bold">{Math.round(state.logoSize)}PX</span>
+              <label className={`text-sm font-bold ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>로고 크기</label>
+              <span className="text-sm text-indigo-400 font-black">{Math.round(state.logoSize)}PX</span>
             </div>
             <input
               type="range"
@@ -112,23 +123,23 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
               max="500"
               value={Math.round(state.logoSize)}
               onChange={(e) => updateState('logoSize', Number(e.target.value))}
-              className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+              className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
             />
           </div>
 
           {/* 로고 배경 제거 체크박스 */}
-          <div className="flex items-center justify-between py-2 border-t border-zinc-800">
-            <label className="text-[9px] text-zinc-300 font-medium">로고 배경 제거</label>
+          <div className="flex items-center justify-between py-3 border-t-2 border-black">
+            <label className={`text-sm font-bold ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>로고 배경 제거</label>
             <button
               onClick={() => updateState('removeLogoBg', !state.removeLogoBg)}
-              className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${
+              className={`w-6 h-6 rounded border-2 border-black flex items-center justify-center transition-all ${
                 state.removeLogoBg
-                  ? 'bg-indigo-600 border-indigo-500'
-                  : 'bg-transparent border-zinc-600'
+                  ? 'bg-indigo-500 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]'
+                  : isDarkMode ? 'bg-zinc-600' : 'bg-white'
               }`}
             >
               {state.removeLogoBg && (
-                <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
               )}
@@ -139,8 +150,8 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
           {state.removeLogoBg && (
             <div>
               <div className="flex justify-between mb-2">
-                <label className="text-[9px] text-zinc-300 font-medium">제거 오차</label>
-                <span className="text-[9px] text-indigo-400 font-bold">{Math.round(state.logoBgThreshold)}%</span>
+                <label className={`text-sm font-bold ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>제거 오차</label>
+                <span className="text-sm text-indigo-400 font-black">{Math.round(state.logoBgThreshold)}%</span>
               </div>
               <input
                 type="range"
@@ -148,7 +159,7 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
                 max="100"
                 value={Math.round(state.logoBgThreshold)}
                 onChange={(e) => updateState('logoBgThreshold', Number(e.target.value))}
-                className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
               />
             </div>
           )}
@@ -166,7 +177,7 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
           <div className="space-y-4">
             {/* 정중앙 정렬 체크박스 */}
             <div className="flex items-center justify-between">
-              <label className="text-[9px] text-zinc-300 font-medium">정중앙 정렬</label>
+              <label className={`text-sm font-bold ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>정중앙 정렬</label>
               <button
                 onClick={() => updateState('spectrumPos', {
                   ...state.spectrumPos,
@@ -174,14 +185,14 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
                   x: !state.spectrumPos.centered ? 50 : state.spectrumPos.x,
                   y: state.spectrumPos.y
                 })}
-                className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${
+                className={`w-6 h-6 rounded border-2 border-black flex items-center justify-center transition-all ${
                   state.spectrumPos.centered
-                    ? 'bg-indigo-600 border-indigo-500'
-                    : 'bg-transparent border-zinc-600'
+                    ? 'bg-indigo-500 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]'
+                    : isDarkMode ? 'bg-zinc-600' : 'bg-white'
                 }`}
               >
                 {state.spectrumPos.centered && (
-                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                   </svg>
                 )}
@@ -189,11 +200,11 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
             </div>
 
             {/* X/Y 위치 */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <div className="flex justify-between mb-2">
-                  <label className="text-[9px] text-zinc-300 font-medium">X 위치</label>
-                  <span className="text-[9px] text-indigo-400 font-bold">{Math.round(state.spectrumPos.x)}%</span>
+                  <label className={`text-sm font-bold ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>X 위치</label>
+                  <span className="text-sm text-indigo-400 font-black">{Math.round(state.spectrumPos.x)}%</span>
                 </div>
                 <input
                   type="range"
@@ -202,13 +213,13 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
                   value={Math.round(state.spectrumPos.x)}
                   onChange={(e) => updateState('spectrumPos', { ...state.spectrumPos, x: Number(e.target.value), centered: false })}
                   disabled={state.spectrumPos.centered}
-                  className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500 disabled:opacity-50"
+                  className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-indigo-500 disabled:opacity-50"
                 />
               </div>
               <div>
                 <div className="flex justify-between mb-2">
-                  <label className="text-[9px] text-zinc-300 font-medium">Y 위치</label>
-                  <span className="text-[9px] text-indigo-400 font-bold">{Math.round(state.spectrumPos.y)}%</span>
+                  <label className={`text-sm font-bold ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>Y 위치</label>
+                  <span className="text-sm text-indigo-400 font-black">{Math.round(state.spectrumPos.y)}%</span>
                 </div>
                 <input
                   type="range"
@@ -216,7 +227,7 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
                   max="100"
                   value={Math.round(state.spectrumPos.y)}
                   onChange={(e) => updateState('spectrumPos', { ...state.spectrumPos, y: Number(e.target.value) })}
-                  className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                  className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
                 />
               </div>
             </div>
@@ -224,8 +235,8 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
             {/* 전체 폭 */}
             <div>
               <div className="flex justify-between mb-2">
-                <label className="text-[9px] text-zinc-300 font-medium">전체 폭 (WIDTH)</label>
-                <span className="text-[9px] text-indigo-400 font-bold">{Math.round(state.spectrumWidth)}%</span>
+                <label className={`text-sm font-bold ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>전체 폭 (WIDTH)</label>
+                <span className="text-sm text-indigo-400 font-black">{Math.round(state.spectrumWidth)}%</span>
               </div>
               <input
                 type="range"
@@ -233,15 +244,15 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
                 max="100"
                 value={Math.round(state.spectrumWidth)}
                 onChange={(e) => updateState('spectrumWidth', Number(e.target.value))}
-                className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
               />
             </div>
 
             {/* 반응 속도 */}
             <div>
               <div className="flex justify-between mb-2">
-                <label className="text-[9px] text-zinc-300 font-medium">반응 속도</label>
-                <span className="text-[9px] text-indigo-400 font-bold">{state.spectrumSpeed}</span>
+                <label className={`text-sm font-bold ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>반응 속도</label>
+                <span className="text-sm text-indigo-400 font-black">{state.spectrumSpeed}</span>
               </div>
               <input
                 type="range"
@@ -249,15 +260,15 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
                 max="100"
                 value={state.spectrumSpeed}
                 onChange={(e) => updateState('spectrumSpeed', Number(e.target.value))}
-                className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
               />
             </div>
 
             {/* 반응 민감도 */}
             <div>
               <div className="flex justify-between mb-2">
-                <label className="text-[9px] text-zinc-300 font-medium">반응 민감도</label>
-                <span className="text-[9px] text-indigo-400 font-bold">{state.spectrumSensitivity}</span>
+                <label className={`text-sm font-bold ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>반응 민감도</label>
+                <span className="text-sm text-indigo-400 font-black">{state.spectrumSensitivity}</span>
               </div>
               <input
                 type="range"
@@ -265,15 +276,15 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
                 max="200"
                 value={state.spectrumSensitivity}
                 onChange={(e) => updateState('spectrumSensitivity', Number(e.target.value))}
-                className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
               />
             </div>
 
             {/* 주파수 대역 */}
             <div>
               <div className="flex justify-between mb-2">
-                <label className="text-[9px] text-zinc-300 font-medium">주파수 대역</label>
-                <span className="text-[9px] text-indigo-400 font-bold">{state.spectrumBands}</span>
+                <label className={`text-sm font-bold ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>주파수 대역</label>
+                <span className="text-sm text-indigo-400 font-black">{state.spectrumBands}</span>
               </div>
               <input
                 type="range"
@@ -281,15 +292,15 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
                 max="256"
                 value={state.spectrumBands}
                 onChange={(e) => updateState('spectrumBands', Number(e.target.value))}
-                className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
               />
             </div>
 
             {/* 최대 높이 */}
             <div>
               <div className="flex justify-between mb-2">
-                <label className="text-[9px] text-zinc-300 font-medium">최대 높이</label>
-                <span className="text-[9px] text-indigo-400 font-bold">{state.spectrumMaxHeight}</span>
+                <label className={`text-sm font-bold ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>최대 높이</label>
+                <span className="text-sm text-indigo-400 font-black">{state.spectrumMaxHeight}</span>
               </div>
               <input
                 type="range"
@@ -297,7 +308,7 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
                 max="200"
                 value={state.spectrumMaxHeight}
                 onChange={(e) => updateState('spectrumMaxHeight', Number(e.target.value))}
-                className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
               />
             </div>
 
@@ -305,8 +316,8 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
             {['bars', 'symmetric', 'mini'].includes(state.visualStyle) && (
               <div>
                 <div className="flex justify-between mb-2">
-                  <label className="text-[9px] text-zinc-300 font-medium">막대 너비</label>
-                  <span className="text-[9px] text-indigo-400 font-bold">{state.spectrumBarWidth}</span>
+                  <label className={`text-sm font-bold ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>막대 너비</label>
+                  <span className="text-sm text-indigo-400 font-black">{state.spectrumBarWidth}</span>
                 </div>
                 <input
                   type="range"
@@ -314,7 +325,7 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
                   max="20"
                   value={state.spectrumBarWidth}
                   onChange={(e) => updateState('spectrumBarWidth', Number(e.target.value))}
-                  className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                  className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
                 />
               </div>
             )}
@@ -323,8 +334,8 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
             {['bars', 'symmetric', 'mini'].includes(state.visualStyle) && (
               <div>
                 <div className="flex justify-between mb-2">
-                  <label className="text-[9px] text-zinc-300 font-medium">막대 간격</label>
-                  <span className="text-[9px] text-indigo-400 font-bold">{state.spectrumBarGap}</span>
+                  <label className={`text-sm font-bold ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>막대 간격</label>
+                  <span className="text-sm text-indigo-400 font-black">{state.spectrumBarGap}</span>
                 </div>
                 <input
                   type="range"
@@ -332,7 +343,7 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
                   max="10"
                   value={state.spectrumBarGap}
                   onChange={(e) => updateState('spectrumBarGap', Number(e.target.value))}
-                  className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                  className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
                 />
               </div>
             )}
@@ -341,8 +352,8 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
             {['circle', 'linear', 'wave', 'field'].includes(state.visualStyle) && (
               <div>
                 <div className="flex justify-between mb-2">
-                  <label className="text-[9px] text-zinc-300 font-medium">선 두께</label>
-                  <span className="text-[9px] text-indigo-400 font-bold">{state.spectrumThickness}</span>
+                  <label className={`text-sm font-bold ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>선 두께</label>
+                  <span className="text-sm text-indigo-400 font-black">{state.spectrumThickness}</span>
                 </div>
                 <input
                   type="range"
@@ -350,7 +361,7 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
                   max="15"
                   value={state.spectrumThickness}
                   onChange={(e) => updateState('spectrumThickness', Number(e.target.value))}
-                  className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                  className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
                 />
               </div>
             )}
@@ -358,8 +369,8 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
             {/* 투명도 */}
             <div>
               <div className="flex justify-between mb-2">
-                <label className="text-[9px] text-zinc-300 font-medium">투명도</label>
-                <span className="text-[9px] text-indigo-400 font-bold">{state.spectrumOpacity}</span>
+                <label className={`text-sm font-bold ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>투명도</label>
+                <span className="text-sm text-indigo-400 font-black">{state.spectrumOpacity}</span>
               </div>
               <input
                 type="range"
@@ -367,7 +378,7 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
                 max="100"
                 value={state.spectrumOpacity}
                 onChange={(e) => updateState('spectrumOpacity', Number(e.target.value))}
-                className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                className="w-full h-2 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-indigo-500"
               />
             </div>
           </div>
@@ -381,16 +392,19 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
         onToggle={() => toggleSection('colorMode')}
         isDarkMode={isDarkMode}
       >
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           {COLOR_MODES.map((mode) => (
             <button
               key={mode.id}
               onClick={() => updateState('colorMode', mode.id)}
-              className={`flex-1 py-2.5 rounded-lg text-[9px] font-bold transition-all border ${
+              className={`flex-1 py-3 rounded-lg text-sm font-black uppercase transition-all border-black ${
                 state.colorMode === mode.id
-                  ? 'bg-indigo-600 text-white border-indigo-500'
-                  : 'bg-transparent border-zinc-800 text-zinc-300 hover:border-zinc-700'
+                  ? 'bg-indigo-500 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]'
+                  : isDarkMode
+                    ? 'bg-zinc-600 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-indigo-500'
+                    : 'bg-zinc-100 text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:bg-indigo-100'
               }`}
+              style={{ borderWidth: '2px' }}
             >
               {mode.label}
             </button>
@@ -405,25 +419,25 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
         onToggle={() => toggleSection('mainColor')}
         isDarkMode={isDarkMode}
       >
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-4 gap-3">
           {DEFAULT_COLORS.slice(0, 16).map(color => (
             <button
               key={color}
               onClick={() => updateState('effectColor', color)}
-              className={`w-full aspect-square rounded-lg transition-all hover:scale-105 ${state.effectColor === color ? 'ring-2 ring-offset-2 ring-offset-[#121214] ring-white' : ''}`}
+              className={`w-full aspect-square rounded-lg border-2 border-black transition-all hover:scale-105 ${state.effectColor === color ? 'ring-2 ring-offset-2 ring-offset-zinc-800 ring-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]' : ''}`}
               style={{ backgroundColor: color }}
             />
           ))}
         </div>
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-3 flex items-center justify-between">
-          <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">HEX</span>
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] font-black tabular-nums tracking-tighter uppercase">{state.effectColor}</span>
+        <div className={`rounded-lg p-4 flex items-center justify-between border-2 border-black ${isDarkMode ? 'bg-zinc-700' : 'bg-zinc-100'}`}>
+          <span className={`text-sm font-black uppercase tracking-wide ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>HEX</span>
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-black tabular-nums tracking-tight uppercase">{state.effectColor}</span>
             <input
               type="color"
               value={state.effectColor}
               onChange={(e) => updateState('effectColor', e.target.value)}
-              className="w-5 h-5 rounded cursor-pointer border border-zinc-700"
+              className="w-8 h-8 rounded cursor-pointer border-2 border-black"
             />
           </div>
         </div>
@@ -437,25 +451,25 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
           onToggle={() => toggleSection('subColor')}
           isDarkMode={isDarkMode}
         >
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-4 gap-3">
             {DEFAULT_COLORS.slice(0, 16).map(color => (
               <button
                 key={`sec-${color}`}
                 onClick={() => updateState('secondaryColor', color)}
-                className={`w-full aspect-square rounded-lg transition-all hover:scale-105 ${state.secondaryColor === color ? 'ring-2 ring-offset-2 ring-offset-[#121214] ring-white' : ''}`}
+                className={`w-full aspect-square rounded-lg border-2 border-black transition-all hover:scale-105 ${state.secondaryColor === color ? 'ring-2 ring-offset-2 ring-offset-zinc-800 ring-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]' : ''}`}
                 style={{ backgroundColor: color }}
               />
             ))}
           </div>
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-3 flex items-center justify-between">
-            <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest">HEX</span>
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-black tabular-nums tracking-tighter uppercase">{state.secondaryColor}</span>
+          <div className={`rounded-lg p-4 flex items-center justify-between border-2 border-black ${isDarkMode ? 'bg-zinc-700' : 'bg-zinc-100'}`}>
+            <span className={`text-sm font-black uppercase tracking-wide ${isDarkMode ? 'text-zinc-300' : 'text-zinc-600'}`}>HEX</span>
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-black tabular-nums tracking-tight uppercase">{state.secondaryColor}</span>
               <input
                 type="color"
                 value={state.secondaryColor}
                 onChange={(e) => updateState('secondaryColor', e.target.value)}
-                className="w-5 h-5 rounded cursor-pointer border border-zinc-700"
+                className="w-8 h-8 rounded cursor-pointer border-2 border-black"
               />
             </div>
           </div>
