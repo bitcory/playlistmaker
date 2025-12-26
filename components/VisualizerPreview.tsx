@@ -926,27 +926,23 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
         const centerY = (height * state.spectrumPos.y) / 100;
         const time = Date.now() / 1000;
 
-        // 공통 주파수 처리 함수
-        const skipLowFreq = Math.floor(dataArray.length * 0.02);
-        const usableRange = Math.floor(dataArray.length * 0.75);
+        // 전체 오디오 레벨 계산 (모든 바가 음량에 반응)
+        let totalLevel = 0;
+        for (let i = 0; i < dataArray.length; i++) {
+          totalLevel += dataArray[i];
+        }
+        const avgLevel = totalLevel / dataArray.length;
 
+        // 각 바의 높이를 결정하는 함수 (변칙적인 랜덤 패턴)
         const getFrequencyValue = (index: number, count: number): number => {
-          const freqPosition = index / count;
-          const logPosition = Math.pow(freqPosition, 0.7);
-          const dataIndex = skipLowFreq + Math.floor(logPosition * usableRange);
+          // 기본 음량 레벨
+          const baseLevel = avgLevel;
 
-          const rangeSize = Math.max(1, Math.floor(usableRange / count / 2));
-          let sum = 0;
-          let sampleCount = 0;
-          for (let j = dataIndex; j < Math.min(dataIndex + rangeSize, dataArray.length); j++) {
-            sum += dataArray[j];
-            sampleCount++;
-          }
-          const rawValue = sampleCount > 0 ? sum / sampleCount : 0;
+          // 변칙적인 랜덤 변화 (매 프레임 다른 값)
+          const randomFactor = 0.5 + Math.random() * 1.0; // 0.5 ~ 1.5 랜덤
 
-          // 주파수 보정: 저주파 감쇠, 고주파 부스트
-          const freqCompensation = 0.3 + freqPosition * 0.9;
-          return rawValue * freqCompensation;
+          // 최종 값: 음량 * 랜덤 변화
+          return baseLevel * randomFactor;
         };
 
         // 그라디언트 생성
@@ -986,14 +982,16 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
           for (let i = 0; i < halfBarsCount; i++) {
             const rawValue = getFrequencyValue(i, halfBarsCount);
 
-            const smoothing = (state.spectrumSpeed / 100) * 0.7 + 0.15;
+            // 스무딩: 더 부드럽게 (낮은 값 = 더 느림)
+            const smoothing = (state.spectrumSpeed / 100) * 0.4 + 0.05;
             const currentValue = audioHistoryRef.current[i];
             const newValue = currentValue + (rawValue - currentValue) * smoothing;
             audioHistoryRef.current[i] = newValue;
 
             const sensitivity = state.spectrumSensitivity / 100;
             const maxHeight = state.spectrumMaxHeight / 100;
-            const barHeight = Math.max(4, (newValue / 255) * height * maxHeight * sensitivity * 0.5);
+            // 높이 배율 축소 (1.0 -> 0.4)
+            const barHeight = Math.max(4, (newValue / 255) * height * maxHeight * sensitivity * 0.4);
 
             // 중앙에서 바깥쪽으로의 거리
             const offset = (i + 0.5) * (actualBarWidth + actualGap);
@@ -1027,24 +1025,25 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
           ctx.globalAlpha = 1;
         }
 
-        // 미니막대: 컴팩트한 스펙트럼
+        // 미니막대: 코너에 작고 컴팩트한 스펙트럼 (참조: 좌상단 작은 컬러풀 바)
         if (state.visualStyle === 'mini') {
-          const miniBarCount = Math.min(32, Math.max(16, Math.floor(state.spectrumBands / 3)));
-          const miniBarWidth = state.spectrumBarWidth;
-          const miniBarGap = state.spectrumBarGap;
-          const totalMiniWidth = miniBarCount * miniBarWidth + (miniBarCount - 1) * miniBarGap;
-          const miniVisualWidth = visualWidth * 0.5;
+          // 컴팩트한 고정 크기 (코너용)
+          const miniBarCount = Math.min(32, Math.max(8, state.spectrumBands));
+          const miniBarWidth = Math.max(2, state.spectrumBarWidth);
+          const miniBarGap = Math.max(1, state.spectrumBarGap);
 
-          const miniScale = totalMiniWidth > miniVisualWidth ? miniVisualWidth / totalMiniWidth : 1;
-          const actualMiniBarWidth = Math.max(2, miniBarWidth * miniScale);
-          const actualMiniGap = miniBarGap * miniScale;
-          const actualTotalWidth = miniBarCount * actualMiniBarWidth + (miniBarCount - 1) * actualMiniGap;
+          // 미니 전용 고정 크기 - 더 작게 (슬라이더로 조절 가능)
+          const miniFixedWidth = (state.spectrumWidth / 100) * 160; // 최대 160px
+          const miniFixedHeight = (state.spectrumMaxHeight / 100) * 60; // 최대 60px
 
-          const miniMaxHeight = height * (state.spectrumMaxHeight / 100) * 0.6;
-          const miniStartX = state.spectrumPos.centered
-            ? (width - actualTotalWidth) / 2
-            : (width * state.spectrumPos.x) / 100 - actualTotalWidth / 2;
-          const miniStartY = centerY;
+          const totalBarSpace = miniBarCount * miniBarWidth + (miniBarCount - 1) * miniBarGap;
+          const scale = totalBarSpace > miniFixedWidth ? miniFixedWidth / totalBarSpace : 1;
+          const actualMiniBarWidth = Math.max(2, miniBarWidth * scale);
+          const actualMiniGap = Math.max(1, miniBarGap * scale);
+
+          // 위치 계산 (코너 배치용 - x,y는 시작점)
+          const miniStartX = (width * state.spectrumPos.x) / 100;
+          const miniBaseY = (height * state.spectrumPos.y) / 100;
 
           if (audioHistoryRef.current.length !== miniBarCount) {
             audioHistoryRef.current = new Array(miniBarCount).fill(0);
@@ -1055,18 +1054,21 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
           for (let i = 0; i < miniBarCount; i++) {
             const rawValue = getFrequencyValue(i, miniBarCount);
 
-            const smoothing = 0.4;
+            // 스무딩 (더 빠른 반응)
+            const smoothing = (state.spectrumSpeed / 100) * 0.5 + 0.1;
             const currentValue = audioHistoryRef.current[i] || 0;
             const newValue = currentValue + (rawValue - currentValue) * smoothing;
             audioHistoryRef.current[i] = newValue;
 
             const sensitivity = state.spectrumSensitivity / 100;
-            const miniBarHeight = Math.max(3, (newValue / 255) * miniMaxHeight * sensitivity * 0.6);
+            // 고정된 최대 높이 내에서 계산 (최소 높이 유지)
+            const miniBarHeight = Math.max(4, (newValue / 255) * miniFixedHeight * sensitivity);
             const x = miniStartX + i * (actualMiniBarWidth + actualMiniGap);
 
             if (state.colorMode === 'rainbow') {
-              const hue = (i / miniBarCount) * 300 - time * 40;
-              ctx.fillStyle = `hsl(${((hue % 360) + 360) % 360}, 85%, 55%)`;
+              // 레인보우: 더 선명하고 빠른 색상 변화
+              const hue = (i / miniBarCount) * 360 - time * 60;
+              ctx.fillStyle = `hsl(${((hue % 360) + 360) % 360}, 90%, 55%)`;
             } else if (state.colorMode === 'gradient') {
               const t = i / miniBarCount;
               const r1 = parseInt(state.effectColor.slice(1, 3), 16);
@@ -1080,9 +1082,11 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
               ctx.fillStyle = state.effectColor;
             }
 
-            ctx.shadowBlur = 8;
+            // 글로우 효과 (부드러운 네온)
+            ctx.shadowBlur = 6;
             ctx.shadowColor = ctx.fillStyle as string;
-            ctx.fillRect(x, miniStartY - miniBarHeight, actualMiniBarWidth, miniBarHeight);
+            // 바를 위로 그림 (baseY 기준)
+            ctx.fillRect(x, miniBaseY - miniBarHeight, actualMiniBarWidth, miniBarHeight);
           }
           ctx.shadowBlur = 0;
           ctx.globalAlpha = 1;
@@ -1091,14 +1095,15 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
         // 베이직 스타일: 자연스러운 오디오 반응 막대
         if (state.visualStyle === 'bars') {
           const barsCount = state.spectrumBands;
-          const barWidth = state.spectrumBarWidth;
-          const barGap = state.spectrumBarGap;
-          const requestedTotalWidth = barsCount * barWidth + (barsCount - 1) * barGap;
 
-          const scale = requestedTotalWidth > visualWidth ? visualWidth / requestedTotalWidth : 1;
-          const actualBarWidth = Math.max(1, barWidth * scale);
-          const actualGap = barGap * scale;
-          const totalBarsWidth = barsCount * actualBarWidth + (barsCount - 1) * actualGap;
+          // visualWidth를 꽉 채우도록 바 너비와 간격 자동 계산
+          const totalGaps = barsCount - 1;
+          const gapRatio = state.spectrumBarGap / (state.spectrumBarWidth + state.spectrumBarGap);
+          const totalGapWidth = visualWidth * gapRatio * 0.3; // 간격 비율 조정
+          const totalBarWidth = visualWidth - totalGapWidth;
+          const actualBarWidth = Math.max(1, totalBarWidth / barsCount);
+          const actualGap = totalGaps > 0 ? totalGapWidth / totalGaps : 0;
+          const totalBarsWidth = visualWidth;
 
           const actualStartX = state.spectrumPos.centered
             ? (width - totalBarsWidth) / 2
@@ -1113,14 +1118,16 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
           for (let i = 0; i < barsCount; i++) {
             const rawValue = getFrequencyValue(i, barsCount);
 
-            const smoothing = (state.spectrumSpeed / 100) * 0.7 + 0.15;
+            // 스무딩: 더 부드럽게 (낮은 값 = 더 느림)
+            const smoothing = (state.spectrumSpeed / 100) * 0.4 + 0.05;
             const currentValue = audioHistoryRef.current[i];
             const newValue = currentValue + (rawValue - currentValue) * smoothing;
             audioHistoryRef.current[i] = newValue;
 
             const sensitivity = state.spectrumSensitivity / 100;
             const maxHeight = state.spectrumMaxHeight / 100;
-            const normalizedHeight = Math.max(2, (newValue / 255) * height * maxHeight * sensitivity * 0.5);
+            // 높이 배율 축소 (1.0 -> 0.4)
+            const normalizedHeight = Math.max(2, (newValue / 255) * height * maxHeight * sensitivity * 0.4);
 
             const x = actualStartX + i * (actualBarWidth + actualGap);
 
@@ -1155,7 +1162,8 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
           // 원이 화면 내에 맞도록 반지름 계산
           const maxRadius = Math.min(width, height) * 0.3 * (state.spectrumWidth / 100);
           const baseRadius = maxRadius * 0.5;
-          const maxBarLength = maxRadius * (state.spectrumMaxHeight / 100) * 0.6;
+          // 높이 배율 축소 (1.2 -> 0.5)
+          const maxBarLength = maxRadius * (state.spectrumMaxHeight / 100) * 0.5;
 
           const arcBars = Math.min(state.spectrumBands, 90);
 
@@ -1170,13 +1178,14 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
           for (let i = 0; i < arcBars; i++) {
             const rawValue = getFrequencyValue(i, arcBars);
 
-            const smoothing = 0.35;
+            // 스무딩: 더 부드럽게
+            const smoothing = (state.spectrumSpeed / 100) * 0.4 + 0.05;
             const currentValue = audioHistoryRef.current[i] || 0;
             const newValue = currentValue + (rawValue - currentValue) * smoothing;
             audioHistoryRef.current[i] = newValue;
 
             const sensitivity = state.spectrumSensitivity / 100;
-            const barLen = Math.max(3, (newValue / 255) * maxBarLength * sensitivity * 0.5);
+            const barLen = Math.max(3, (newValue / 255) * maxBarLength * sensitivity);
 
             // 360도: 위(12시)에서 시작해서 시계방향
             const angle = (i / arcBars) * Math.PI * 2 - Math.PI / 2;
@@ -1202,7 +1211,7 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
               ctx.strokeStyle = state.effectColor;
             }
 
-            ctx.lineWidth = Math.max(2, state.spectrumBarWidth);
+            ctx.lineWidth = Math.max(2, state.spectrumThickness * 1.5);
             ctx.shadowBlur = 8;
             ctx.shadowColor = ctx.strokeStyle as string;
             ctx.beginPath();
@@ -1232,7 +1241,8 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
             ? (width - visualWidth) / 2
             : startX;
           const lineY = centerY;
-          const maxWaveHeight = height * (state.spectrumMaxHeight / 100) * 0.4;
+          // 높이 배율 축소 (0.8 -> 0.3)
+          const maxWaveHeight = height * (state.spectrumMaxHeight / 100) * 0.3;
           const pointCount = Math.min(totalBars, 64);
 
           if (audioHistoryRef.current.length !== pointCount) {
@@ -1241,7 +1251,7 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
 
           ctx.save();
           ctx.globalAlpha = state.spectrumOpacity / 100;
-          ctx.lineWidth = state.spectrumThickness || 3;
+          ctx.lineWidth = Math.max(2, state.spectrumThickness * 1.5);
           ctx.lineCap = 'round';
           ctx.lineJoin = 'round';
           ctx.shadowBlur = 12;
@@ -1251,13 +1261,14 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
           for (let i = 0; i <= pointCount; i++) {
             const rawValue = getFrequencyValue(i, pointCount);
 
-            const smoothing = 0.3;
+            // 스무딩: 더 부드럽게
+            const smoothing = (state.spectrumSpeed / 100) * 0.4 + 0.05;
             const currentValue = audioHistoryRef.current[i] || 0;
             const newValue = currentValue + (rawValue - currentValue) * smoothing;
             if (i < pointCount) audioHistoryRef.current[i] = newValue;
 
             const sensitivity = state.spectrumSensitivity / 100;
-            const waveHeight = (newValue / 255) * maxWaveHeight * sensitivity * 0.6;
+            const waveHeight = (newValue / 255) * maxWaveHeight * sensitivity;
             const x = linearStartX + (i / pointCount) * visualWidth;
             const y = lineY - waveHeight;
             points.push({x, y});
@@ -1293,15 +1304,33 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
             ? (width - visualWidth) / 2
             : startX;
           const baseLineY = centerY;
-          const maxWaveHeight = height * (state.spectrumMaxHeight / 100) * 0.35;
+          // 높이 배율 축소 (0.7 -> 0.3)
+          const maxWaveHeight = height * (state.spectrumMaxHeight / 100) * 0.3;
           const waveCount = 3;
-          const waveSpacing = 10;
+          const waveSpacing = (state.spectrumThickness || 3) * 3; // 선 두께에 비례한 간격
+
+          // 스무딩을 위한 히스토리 초기화
+          if (audioHistoryRef.current.length !== totalBars + 1) {
+            audioHistoryRef.current = new Array(totalBars + 1).fill(0);
+          }
+
+          // 스무딩 적용된 값 계산 (더 부드럽게)
+          const smoothing = (state.spectrumSpeed / 100) * 0.4 + 0.05;
+          const sensitivity = state.spectrumSensitivity / 100;
+          const smoothedValues: number[] = [];
+          for (let i = 0; i <= totalBars; i++) {
+            const rawValue = getFrequencyValue(i, totalBars);
+            const currentValue = audioHistoryRef.current[i] || 0;
+            const newValue = currentValue + (rawValue - currentValue) * smoothing;
+            audioHistoryRef.current[i] = newValue;
+            smoothedValues.push((newValue / 255) * maxWaveHeight * sensitivity);
+          }
 
           for (let w = 0; w < waveCount; w++) {
             ctx.save();
             const opacity = w === 1 ? 1 : 0.6;
             ctx.globalAlpha = opacity * (state.spectrumOpacity / 100);
-            ctx.lineWidth = (state.spectrumThickness || 3) * (w === 1 ? 1.3 : 0.9);
+            ctx.lineWidth = state.spectrumThickness * (w === 1 ? 2 : 1.2);
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
             ctx.shadowBlur = w === 1 ? 15 : 8;
@@ -1311,9 +1340,7 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
 
             ctx.beginPath();
             for (let i = 0; i <= totalBars; i++) {
-              const rawValue = getFrequencyValue(i, totalBars);
-              const sensitivity = state.spectrumSensitivity / 100;
-              const waveHeight = (rawValue / 255) * maxWaveHeight * sensitivity * 0.5;
+              const waveHeight = smoothedValues[i];
               const x = waveStartX + (i / totalBars) * visualWidth;
               const y = baseLineY + yOffset - waveHeight;
 
@@ -1321,8 +1348,7 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
                 ctx.moveTo(x, y);
               } else {
                 const prevX = waveStartX + ((i - 1) / totalBars) * visualWidth;
-                const prevRawValue = getFrequencyValue(i - 1, totalBars);
-                const prevHeight = (prevRawValue / 255) * maxWaveHeight * sensitivity * 0.5;
+                const prevHeight = smoothedValues[i - 1];
                 const prevY = baseLineY + yOffset - prevHeight;
                 const cpX = (prevX + x) / 2;
                 const cpY = (prevY + y) / 2;
@@ -1351,23 +1377,34 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
           const fieldStartX = state.spectrumPos.centered
             ? (width - visualWidth) / 2
             : startX;
-          const fieldHeight = height * (state.spectrumMaxHeight / 100) * 2;
+          // 높이 배율 축소 (1.6 -> 0.5)
+          const heightMultiplier = state.spectrumMaxHeight / 100; // 0~1 범위
+          const fieldHeight = height * heightMultiplier * 0.5;
           // Y 위치에서 위쪽으로 웨이브가 펼쳐지도록
           const fieldY = (height * state.spectrumPos.y) / 100;
           const lineCount = 12;
 
-          // 전체 오디오 레벨 계산
+          // 스무딩을 위한 히스토리 초기화
+          if (audioHistoryRef.current.length !== totalBars + 1) {
+            audioHistoryRef.current = new Array(totalBars + 1).fill(0);
+          }
+
+          // 전체 오디오 레벨 계산 (스무딩: 더 부드럽게)
+          const smoothing = (state.spectrumSpeed / 100) * 0.4 + 0.05;
           let totalAudioLevel = 0;
           for (let j = 0; j < Math.min(32, totalBars); j++) {
             totalAudioLevel += getFrequencyValue(j, 32);
           }
           const avgAudioLevel = totalAudioLevel / 32 / 255;
 
+          // 애니메이션 속도 (더 느리게 조정)
+          const animSpeed = (state.spectrumSpeed / 100) * 0.8 + 0.3; // 0.3 ~ 1.1
+
           for (let line = 0; line < lineCount; line++) {
             ctx.save();
             const lineProgress = line / (lineCount - 1);
             ctx.globalAlpha = (0.4 + lineProgress * 0.6) * (state.spectrumOpacity / 100);
-            ctx.lineWidth = (state.spectrumThickness || 2) * (0.8 + lineProgress * 0.8);
+            ctx.lineWidth = state.spectrumThickness * (1 + lineProgress * 0.8);
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
             ctx.shadowBlur = 15 + avgAudioLevel * 20;
@@ -1379,17 +1416,25 @@ const VisualizerPreview: React.FC<VisualizerPreviewProps> = ({ state, assets, au
             ctx.beginPath();
             for (let i = 0; i <= totalBars; i++) {
               const rawValue = getFrequencyValue(i, totalBars);
-              // 오디오 반응 증폭
-              const audioBoost = 1 + avgAudioLevel * 2;
-              const baseAmplitude = 20 + (rawValue / 255) * 60 * sensitivity;
+              // 스무딩 적용
+              const currentValue = audioHistoryRef.current[i] || 0;
+              const newValue = currentValue + (rawValue - currentValue) * smoothing;
+              audioHistoryRef.current[i] = newValue;
+
+              // 오디오 반응 증폭 (배율 축소)
+              const audioBoost = 1 + avgAudioLevel * 2 * heightMultiplier;
+              // 기본 진폭 축소 (20+100 -> 10+40)
+              const baseAmplitude = (10 + (newValue / 255) * 40 * sensitivity) * heightMultiplier;
               const amplitude = baseAmplitude * audioBoost;
 
               const x = fieldStartX + (i / totalBars) * visualWidth;
-              // 더 빠르고 복잡한 웨이브 패턴
-              const wavePhase1 = (i / totalBars) * Math.PI * 8 - time * 4 + line * 0.8;
-              const wavePhase2 = (i / totalBars) * Math.PI * 3 + time * 2 - line * 0.3;
-              const combinedWave = Math.sin(wavePhase1) * 0.7 + Math.sin(wavePhase2) * 0.3;
-              const y = fieldY + yOffset + combinedWave * amplitude * (1 - lineProgress * 0.4);
+              // 더 격렬하고 복잡한 웨이브 패턴 (다중 주파수) - 속도 적용
+              const wavePhase1 = (i / totalBars) * Math.PI * 6 - time * 5 * animSpeed + line * 1.2;
+              const wavePhase2 = (i / totalBars) * Math.PI * 12 + time * 3 * animSpeed - line * 0.5;
+              const wavePhase3 = (i / totalBars) * Math.PI * 3 - time * 7 * animSpeed + line * 0.8;
+              // 여러 웨이브 합성으로 불규칙한 출렁임
+              const combinedWave = Math.sin(wavePhase1) * 0.5 + Math.sin(wavePhase2) * 0.3 + Math.sin(wavePhase3) * 0.4;
+              const y = fieldY + yOffset + combinedWave * amplitude * (1.2 - lineProgress * 0.3);
 
               if (i === 0) {
                 ctx.moveTo(x, y);

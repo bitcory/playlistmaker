@@ -301,21 +301,59 @@ const EditorRightPanel: React.FC<EditorRightPanelProps> = ({ state, updateState,
               />
             </div>
 
-            {/* 선 두께 */}
-            <div>
-              <div className="flex justify-between mb-2">
-                <label className="text-[9px] text-zinc-300 font-medium">선 두께</label>
-                <span className="text-[9px] text-indigo-400 font-bold">{state.spectrumThickness}</span>
+            {/* 막대 너비 (베이직/대칭/미니 전용) */}
+            {['bars', 'symmetric', 'mini'].includes(state.visualStyle) && (
+              <div>
+                <div className="flex justify-between mb-2">
+                  <label className="text-[9px] text-zinc-300 font-medium">막대 너비</label>
+                  <span className="text-[9px] text-indigo-400 font-bold">{state.spectrumBarWidth}</span>
+                </div>
+                <input
+                  type="range"
+                  min="1"
+                  max="20"
+                  value={state.spectrumBarWidth}
+                  onChange={(e) => updateState('spectrumBarWidth', Number(e.target.value))}
+                  className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                />
               </div>
-              <input
-                type="range"
-                min="1"
-                max="10"
-                value={state.spectrumThickness}
-                onChange={(e) => updateState('spectrumThickness', Number(e.target.value))}
-                className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
-              />
-            </div>
+            )}
+
+            {/* 막대 간격 (베이직/대칭/미니 전용) */}
+            {['bars', 'symmetric', 'mini'].includes(state.visualStyle) && (
+              <div>
+                <div className="flex justify-between mb-2">
+                  <label className="text-[9px] text-zinc-300 font-medium">막대 간격</label>
+                  <span className="text-[9px] text-indigo-400 font-bold">{state.spectrumBarGap}</span>
+                </div>
+                <input
+                  type="range"
+                  min="0"
+                  max="10"
+                  value={state.spectrumBarGap}
+                  onChange={(e) => updateState('spectrumBarGap', Number(e.target.value))}
+                  className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                />
+              </div>
+            )}
+
+            {/* 선 두께 (원형/선형/파형/필드웨이브 전용) */}
+            {['circle', 'linear', 'wave', 'field'].includes(state.visualStyle) && (
+              <div>
+                <div className="flex justify-between mb-2">
+                  <label className="text-[9px] text-zinc-300 font-medium">선 두께</label>
+                  <span className="text-[9px] text-indigo-400 font-bold">{state.spectrumThickness}</span>
+                </div>
+                <input
+                  type="range"
+                  min="1"
+                  max="15"
+                  value={state.spectrumThickness}
+                  onChange={(e) => updateState('spectrumThickness', Number(e.target.value))}
+                  className="w-full h-1 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                />
+              </div>
+            )}
 
             {/* 투명도 */}
             <div>

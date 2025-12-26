@@ -19,110 +19,112 @@ import HelpModal from './components/HelpModal';
 import ExportModal from './components/ExportModal';
 import { EditorState, ProjectAsset, AudioTrack } from './types';
 
-// 비주얼 스타일별 프리셋 설정
+// 비주얼 스타일별 프리셋 설정 (슬라이더 중간값 기준 최적화)
+// 범위: 폭(10-100), 속도(1-100), 민감도(20-200), 대역(16-256), 높이(10-200), 두께(1-10), 투명도(10-100)
 const VISUAL_STYLE_PRESETS: Record<string, Partial<EditorState>> = {
   none: {
-    spectrumPos: { x: 50, y: 75, centered: true },
-    spectrumWidth: 100,
-    spectrumSpeed: 50,
-    spectrumSensitivity: 120,
-    spectrumBands: 64,
-    spectrumMaxHeight: 40,
-    spectrumBarWidth: 3,
+    // 없음 - 기본값 유지
+    spectrumPos: { x: 50, y: 50, centered: true },
+    spectrumWidth: 55,       // 중간 (10-100)
+    spectrumSpeed: 50,       // 중간 (1-100)
+    spectrumSensitivity: 110, // 중간 (20-200)
+    spectrumBands: 64,       // 적당히 (16-256)
+    spectrumMaxHeight: 100,  // 중간 (10-200)
+    spectrumBarWidth: 4,
     spectrumBarGap: 2,
-    spectrumThickness: 2,
-    spectrumOpacity: 90
+    spectrumThickness: 5,    // 중간 (1-10)
+    spectrumOpacity: 70      // 약간 높게
   },
   bars: {
-    // 베이직 (막대)
-    spectrumPos: { x: 50, y: 98, centered: false },
-    spectrumWidth: 100,
-    spectrumSpeed: 60,
-    spectrumSensitivity: 120,
-    spectrumBands: 246,
-    spectrumMaxHeight: 40,
-    spectrumBarWidth: 3,
+    // 베이직 (막대) - 하단에서 위로 솟는 막대
+    spectrumPos: { x: 50, y: 85, centered: true }, // 85%로 조정 (위아래 조절 가능)
+    spectrumWidth: 70,
+    spectrumSpeed: 50,
+    spectrumSensitivity: 110,
+    spectrumBands: 80,       // 적당한 막대 수
+    spectrumMaxHeight: 100,
+    spectrumBarWidth: 4,
     spectrumBarGap: 2,
-    spectrumThickness: 2,
-    spectrumOpacity: 90
+    spectrumThickness: 5,    // bars에는 적용 안됨 (fillRect 사용)
+    spectrumOpacity: 70
   },
   symmetric: {
-    // 대칭막대
-    spectrumPos: { x: 50, y: 100, centered: true },
-    spectrumWidth: 100,
+    // 대칭막대 - 중앙에서 좌우로 펼쳐지는 미러 효과
+    spectrumPos: { x: 50, y: 80, centered: true }, // 80%로 조정
+    spectrumWidth: 60,
     spectrumSpeed: 50,
-    spectrumSensitivity: 200,
-    spectrumBands: 130,
-    spectrumMaxHeight: 24,
-    spectrumBarWidth: 3,
-    spectrumBarGap: 2,
-    spectrumThickness: 1,
-    spectrumOpacity: 100
+    spectrumSensitivity: 110,
+    spectrumBands: 64,
+    spectrumMaxHeight: 100,
+    spectrumBarWidth: 5,
+    spectrumBarGap: 3,
+    spectrumThickness: 5,
+    spectrumOpacity: 75
   },
   mini: {
-    // 미니막대
-    spectrumPos: { x: 6, y: 8, centered: false },
-    spectrumWidth: 10,
-    spectrumSpeed: 50,
-    spectrumSensitivity: 113,
-    spectrumBands: 16,
-    spectrumMaxHeight: 34,
-    spectrumBarWidth: 3,
-    spectrumBarGap: 2,
-    spectrumThickness: 1,
-    spectrumOpacity: 100
+    // 미니막대 - 코너에 작고 컴팩트하게 표시
+    spectrumPos: { x: 3, y: 12, centered: false }, // 좌상단 코너
+    spectrumWidth: 40,       // 최대 80px 너비
+    spectrumSpeed: 60,       // 약간 빠르게 반응
+    spectrumSensitivity: 130, // 민감하게
+    spectrumBands: 20,       // 적은 바 수로 컴팩트하게
+    spectrumMaxHeight: 50,   // 최대 40px 높이로 낮게
+    spectrumBarWidth: 3,     // 좁은 바
+    spectrumBarGap: 1,       // 좁은 간격
+    spectrumThickness: 3,
+    spectrumOpacity: 90      // 선명하게
   },
   circle: {
-    // 원형
-    spectrumPos: { x: 50, y: 87, centered: true },
-    spectrumWidth: 50,
-    spectrumSpeed: 100,
-    spectrumSensitivity: 200,
-    spectrumBands: 256,
-    spectrumMaxHeight: 200,
-    spectrumBarWidth: 3,
+    // 원형 - 화면 중앙에 360도 비주얼라이저
+    spectrumPos: { x: 50, y: 50, centered: true },
+    spectrumWidth: 50,       // 중간 크기
+    spectrumSpeed: 50,
+    spectrumSensitivity: 110,
+    spectrumBands: 72,
+    spectrumMaxHeight: 100,
+    spectrumBarWidth: 4,
     spectrumBarGap: 2,
-    spectrumThickness: 1,
-    spectrumOpacity: 100
+    spectrumThickness: 4,    // 원형에서 선 두께 적용됨
+    spectrumOpacity: 75
   },
   linear: {
-    // 선형
-    spectrumPos: { x: 50, y: 100, centered: true },
-    spectrumWidth: 100,
-    spectrumSpeed: 100,
-    spectrumSensitivity: 200,
-    spectrumBands: 256,
+    // 선형 - 부드러운 단일 웨이브 라인
+    spectrumPos: { x: 50, y: 70, centered: true }, // 70%로 조정
+    spectrumWidth: 70,
+    spectrumSpeed: 50,
+    spectrumSensitivity: 110,
+    spectrumBands: 64,
     spectrumMaxHeight: 100,
-    spectrumBarWidth: 3,
+    spectrumBarWidth: 4,
     spectrumBarGap: 2,
-    spectrumThickness: 1,
-    spectrumOpacity: 100
+    spectrumThickness: 5,    // 선 두께 적용됨
+    spectrumOpacity: 75
   },
   wave: {
-    // 파형
-    spectrumPos: { x: 50, y: 100, centered: true },
-    spectrumWidth: 100,
-    spectrumSpeed: 100,
-    spectrumSensitivity: 200,
-    spectrumBands: 256,
+    // 파형 - 3중 겹침 웨이브
+    spectrumPos: { x: 50, y: 75, centered: true }, // 75%로 조정
+    spectrumWidth: 70,
+    spectrumSpeed: 50,
+    spectrumSensitivity: 110,
+    spectrumBands: 48,
     spectrumMaxHeight: 100,
-    spectrumBarWidth: 3,
+    spectrumBarWidth: 4,
     spectrumBarGap: 2,
-    spectrumThickness: 1,
-    spectrumOpacity: 100
+    spectrumThickness: 4,    // 선 두께 적용됨
+    spectrumOpacity: 70
   },
   field: {
-    // 필드웨이브
-    spectrumPos: { x: 50, y: 100, centered: true },
-    spectrumWidth: 100,
-    spectrumSpeed: 100,
-    spectrumSensitivity: 200,
-    spectrumBands: 256,
-    spectrumMaxHeight: 10,
-    spectrumBarWidth: 3,
+    // 필드웨이브 - 다중 레이어 출렁이는 파도
+    spectrumPos: { x: 50, y: 85, centered: true }, // 85%로 조정
+    spectrumWidth: 80,
+    spectrumSpeed: 50,
+    spectrumSensitivity: 110,
+    spectrumBands: 48,
+    spectrumMaxHeight: 100,
+    spectrumBarWidth: 4,
     spectrumBarGap: 2,
-    spectrumThickness: 1,
-    spectrumOpacity: 100
+    spectrumThickness: 3,    // 선 두께 적용됨
+    spectrumOpacity: 65
   }
 };
 
@@ -153,16 +155,17 @@ const INITIAL_EDITOR_STATE: EditorState = {
   removeLogoBg: false,
   logoBgThreshold: 90,
   customPalette: [],
-  spectrumPos: { x: 50, y: 75, centered: true },
-  spectrumWidth: 100,
-  spectrumBarWidth: 3,
+  // bars 스타일 기본값 (슬라이더 중간값 기준)
+  spectrumPos: { x: 50, y: 85, centered: true }, // 85% (위아래 조절 가능)
+  spectrumWidth: 70,        // 중간보다 약간 높게
+  spectrumBarWidth: 4,
   spectrumBarGap: 2,
-  spectrumSpeed: 50,
-  spectrumSensitivity: 120,
-  spectrumBands: 64,
-  spectrumMaxHeight: 40,
-  spectrumThickness: 2,
-  spectrumOpacity: 90
+  spectrumSpeed: 50,        // 중간 (1-100)
+  spectrumSensitivity: 110, // 중간 (20-200)
+  spectrumBands: 80,        // 적당한 막대 수
+  spectrumMaxHeight: 100,   // 중간 (10-200)
+  spectrumThickness: 5,     // bars에는 미적용
+  spectrumOpacity: 70       // 중간보다 약간 높게
 };
 
 const App: React.FC = () => {
