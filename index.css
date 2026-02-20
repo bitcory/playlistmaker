@@ -13,151 +13,94 @@
 }
 
 body {
-  font-family: 'GowunDodum', 'Inter', sans-serif;
+  font-family: 'Inter', 'GowunDodum', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
 }
 
-/* Neobrutalism Custom Scrollbar */
+/* Modern Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: #e5e5e5;
-  border-left: 2px solid black;
+  background: transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #a3a3a3;
-  border: 2px solid black;
-  border-radius: 0;
+  background: rgba(113, 113, 122, 0.4);
+  border-radius: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #737373;
+  background: rgba(113, 113, 122, 0.6);
 }
 
-/* Dark mode scrollbar */
-.dark .custom-scrollbar::-webkit-scrollbar-track {
-  background: #27272a;
-}
-
-.dark .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #52525b;
-}
-
-/* Neobrutalism Range Slider */
+/* Modern Range Slider */
 input[type='range'] {
   -webkit-appearance: none;
   appearance: none;
-  height: 8px;
-  border-radius: 0;
-  border: 2px solid black;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(63, 63, 70, 0.6);
   cursor: pointer;
+  outline: none;
 }
 
 input[type='range']::-webkit-slider-track {
-  height: 8px;
-  border-radius: 0;
+  height: 6px;
+  border-radius: 3px;
 }
 
 input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 18px;
-  height: 18px;
-  background: #fbbf24;
-  border: 2px solid black;
-  border-radius: 0;
+  width: 16px;
+  height: 16px;
+  background: #818cf8;
+  border: 2px solid #6366f1;
+  border-radius: 50%;
   cursor: pointer;
-  box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
-  transition: all 0.1s ease;
+  box-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
+  transition: all 0.15s ease;
 }
 
 input[type='range']::-webkit-slider-thumb:hover {
-  background: #f59e0b;
-  transform: scale(1.1);
+  background: #a5b4fc;
+  transform: scale(1.15);
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.6);
 }
 
 input[type='range']::-webkit-slider-thumb:active {
-  box-shadow: 0px 0px 0px 0px rgba(0,0,0,1);
-  transform: translate(2px, 2px);
+  transform: scale(1.05);
 }
 
 /* Firefox */
 input[type='range']::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  background: #fbbf24;
-  border: 2px solid black;
-  border-radius: 0;
+  width: 16px;
+  height: 16px;
+  background: #818cf8;
+  border: 2px solid #6366f1;
+  border-radius: 50%;
   cursor: pointer;
-  box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+  box-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
 }
 
 input[type='range']::-moz-range-track {
-  height: 8px;
-  background: #e5e5e5;
-  border: 2px solid black;
-  border-radius: 0;
-}
-
-/* Neobrutalism Button Base */
-.neo-btn {
-  border: 2px solid black;
-  box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
-  transition: all 0.1s ease;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.neo-btn:hover {
-  box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
-  transform: translate(2px, 2px);
-}
-
-.neo-btn:active {
-  box-shadow: 0px 0px 0px 0px rgba(0,0,0,1);
-  transform: translate(4px, 4px);
-}
-
-/* Neobrutalism Card */
-.neo-card {
-  border: 3px solid black;
-  box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
-}
-
-/* Neobrutalism Input */
-.neo-input {
-  border: 2px solid black;
-  border-radius: 0;
-  font-family: 'GowunDodum', sans-serif;
-}
-
-.neo-input:focus {
-  outline: none;
-  box-shadow: 3px 3px 0px 0px rgba(0,0,0,1);
+  height: 6px;
+  background: rgba(63, 63, 70, 0.6);
+  border-radius: 3px;
+  border: none;
 }
 
 /* Selection Color */
 ::selection {
-  background: #fbbf24;
-  color: black;
+  background: rgba(99, 102, 241, 0.4);
+  color: white;
 }
 
-/* Animations */
-@keyframes neo-pulse {
-  0%, 100% {
-    box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
-  }
-  50% {
-    box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
-  }
-}
-
-.neo-pulse {
-  animation: neo-pulse 2s ease-in-out infinite;
+/* Smooth transitions */
+.transition-smooth {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }

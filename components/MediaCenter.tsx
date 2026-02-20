@@ -148,119 +148,114 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
   };
 
   return (
-    <div className={`min-h-full flex flex-col pb-16 md:pb-0 transition-colors ${
-      isDarkMode ? 'bg-zinc-900' : 'bg-amber-50'
+    <div className={`min-h-full flex flex-col pb-16 md:pb-0 transition-colors duration-300 ${
+      isDarkMode ? 'bg-zinc-950' : 'bg-zinc-50'
     }`}>
-      {/* 상단 헤더 - 네오브루탈 */}
+      {/* Header */}
       <header
-        className={`h-16 md:h-20 flex items-center justify-between px-4 md:px-6 border-b-4 transition-colors ${
-          isDarkMode ? 'bg-zinc-800 border-black' : 'bg-white border-black'
+        className={`h-16 md:h-20 flex items-center justify-between px-4 md:px-6 border-b transition-colors duration-300 ${
+          isDarkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'
         }`}
       >
         <div className="flex items-center gap-2 md:gap-3">
           <span
-            className={`hidden sm:inline text-xs md:text-sm font-black tracking-[0.15em] uppercase px-3 py-1.5 rounded border-black ${
-              isDarkMode ? 'bg-pink-500 text-white' : 'bg-pink-400 text-black'
+            className={`hidden sm:inline text-xs md:text-sm font-medium tracking-wide px-3 py-1.5 rounded-full ${
+              isDarkMode ? 'bg-indigo-600/20 text-indigo-400' : 'bg-indigo-50 text-indigo-600'
             }`}
-            style={{ borderWidth: '2px' }}
           >프로젝트</span>
-          <div className="h-2.5 w-2.5 rounded-sm bg-lime-400 border-2 border-black" />
-          <span className="text-sm md:text-base font-black uppercase">미디어 센터</span>
+          <div className="h-2 w-2 rounded-full bg-emerald-500" />
+          <span className={`text-sm md:text-base font-semibold ${isDarkMode ? 'text-zinc-100' : 'text-zinc-900'}`}>미디어 센터</span>
         </div>
 
         <button
           onClick={onEnterStudio}
           disabled={assets.audioTracks.length === 0}
           className={`
-            px-6 md:px-10 py-3 md:py-4 rounded-lg font-black text-sm md:text-base uppercase
-            transition-all flex items-center gap-2 md:gap-3 border-black
+            px-6 md:px-10 py-2.5 md:py-3 rounded-lg font-semibold text-sm md:text-base
+            transition-all duration-200 flex items-center gap-2 md:gap-3
             ${assets.audioTracks.length === 0
-              ? 'bg-zinc-300 text-zinc-500 cursor-not-allowed'
-              : 'bg-lime-400 text-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px]'
+              ? isDarkMode
+                ? 'bg-zinc-800 text-zinc-600 cursor-not-allowed'
+                : 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
+              : 'bg-indigo-600 text-white hover:bg-indigo-500 active:scale-[0.98]'
             }
           `}
-          style={{ borderWidth: '3px' }}
         >
           <span className="hidden sm:inline">스튜디오 입장</span>
           <span className="sm:hidden">스튜디오</span>
-          <ArrowRight className="w-5 h-5 stroke-[2.5]" />
+          <ArrowRight className="w-5 h-5 stroke-[2]" />
         </button>
       </header>
 
-      {/* 메인 컨텐츠 */}
+      {/* Main Content */}
       <div className="flex-1 p-4 md:p-6 w-full overflow-y-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-8">
 
-          {/* 섹션 1: 비주얼 자산 */}
+          {/* Section 1: Visual Assets */}
           <div className="lg:col-span-4 space-y-4 md:space-y-6">
             <section>
               <div className="flex items-center gap-3 mb-4 md:mb-5">
                 <span
-                  className="text-xs md:text-sm font-black uppercase tracking-widest px-3 py-1.5 bg-violet-500 text-white rounded border-2 border-black"
+                  className={`text-xs font-medium tracking-wide px-3 py-1 rounded-full ${
+                    isDarkMode ? 'bg-violet-500/15 text-violet-400' : 'bg-violet-50 text-violet-600'
+                  }`}
                 >01. 비주얼</span>
-                <span className="h-[3px] flex-1 bg-black" />
+                <span className={`h-px flex-1 ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`} />
               </div>
 
               <div className="space-y-4 md:space-y-6">
-                {/* 배경 이미지 - 네오브루탈 */}
+                {/* Background Image */}
                 <div className="space-y-2 md:space-y-3">
-                  <div className="flex justify-between items-center px-1">
-                    <label className="text-xs md:text-sm font-black uppercase">배경 이미지</label>
-                    <span
-                      className="text-xs md:text-sm font-black uppercase px-3 py-1.5 bg-cyan-400 text-black rounded border-2 border-black"
-                    >16:9 HD</span>
-                  </div>
                   <div
-                    className={`relative aspect-video rounded-lg overflow-hidden group border-black ${
-                      isDarkMode ? 'bg-zinc-800' : 'bg-white'
+                    className={`relative aspect-video rounded-xl overflow-hidden group border transition-colors duration-200 ${
+                      isDarkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'
                     }`}
-                    style={{ borderWidth: '3px' }}
                   >
                     <input type="file" accept="image/*" className="absolute inset-0 opacity-0 z-10 cursor-pointer" onChange={(e) => handleImageUpload(e, 'background')} />
                     {assets.background ? (
                       <img src={assets.background} alt="배경" className="w-full h-full object-cover" />
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center">
-                        <ImageIcon className={`w-10 md:w-12 h-10 md:h-12 mb-2 ${isDarkMode ? 'text-zinc-600' : 'text-zinc-300'}`} />
-                        <span className="text-xs md:text-sm font-black uppercase tracking-widest">업로드</span>
+                        <ImageIcon className={`w-10 md:w-12 h-10 md:h-12 mb-2 ${isDarkMode ? 'text-zinc-700' : 'text-zinc-300'}`} />
+                        <span className={`text-xs md:text-sm font-medium ${isDarkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>클릭하여 업로드</span>
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                      <span className="px-4 md:px-5 py-2 md:py-2.5 bg-lime-400 text-black text-xs md:text-sm font-black rounded border-2 border-black uppercase">변경</span>
+                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center pointer-events-none">
+                      <span className="px-4 md:px-5 py-2 md:py-2.5 bg-indigo-600 text-white text-xs md:text-sm font-medium rounded-lg">변경</span>
                     </div>
                   </div>
                 </div>
 
-                {/* 로고 - 네오브루탈 */}
+                {/* Logo */}
                 <div className="space-y-2 md:space-y-3">
-                  <label className="text-xs md:text-sm font-black uppercase px-1">브랜드 로고</label>
+                  <label className={`text-xs md:text-sm font-medium px-1 ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>브랜드 로고</label>
                   <div
-                    className={`flex gap-4 md:gap-5 p-4 md:p-5 items-center rounded-lg border-black ${
-                      isDarkMode ? 'bg-zinc-800' : 'bg-white'
+                    className={`flex gap-4 md:gap-5 p-4 md:p-5 items-center rounded-xl border transition-colors duration-200 ${
+                      isDarkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'
                     }`}
-                    style={{ borderWidth: '3px' }}
                   >
                     <div
-                      className={`relative w-20 h-20 md:w-28 md:h-28 rounded-lg flex-shrink-0 group overflow-hidden border-black ${
-                        isDarkMode ? 'bg-zinc-900' : 'bg-zinc-100'
+                      className={`relative w-20 h-20 md:w-28 md:h-28 rounded-xl flex-shrink-0 group overflow-hidden border transition-colors duration-200 ${
+                        isDarkMode ? 'bg-zinc-800 border-zinc-700' : 'bg-zinc-50 border-zinc-200'
                       }`}
-                      style={{ borderWidth: '2px' }}
                     >
                       <input type="file" accept="image/*" className="absolute inset-0 opacity-0 z-10 cursor-pointer" onChange={(e) => handleImageUpload(e, 'logo')} />
                       {assets.logo ? (
                         <img src={assets.logo} alt="로고" className="w-full h-full object-contain p-2 md:p-3" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <Settings2 className={`w-6 md:w-8 h-6 md:h-8 ${isDarkMode ? 'text-zinc-700' : 'text-zinc-400'}`} />
+                          <Settings2 className={`w-6 md:w-8 h-6 md:h-8 ${isDarkMode ? 'text-zinc-600' : 'text-zinc-400'}`} />
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none text-white text-xs md:text-sm font-black uppercase">편집</div>
+                      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center pointer-events-none">
+                        <span className="text-white text-xs md:text-sm font-medium">편집</span>
+                      </div>
                     </div>
                     <div className="flex-1 space-y-1.5 md:space-y-2 min-w-0">
-                      <p className="text-sm md:text-base font-black">브랜드 심볼</p>
-                      <p className={`text-xs md:text-sm font-medium ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>PNG 투명 배경</p>
+                      <p className={`text-sm md:text-base font-semibold ${isDarkMode ? 'text-zinc-100' : 'text-zinc-900'}`}>브랜드 심볼</p>
+                      <p className={`text-xs md:text-sm ${isDarkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>PNG 투명 배경</p>
                       <button
-                        className="text-xs md:text-sm font-black uppercase px-3 py-1.5 bg-rose-500 text-white rounded border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+                        className="text-xs md:text-sm font-medium px-3 py-1.5 bg-rose-600/10 text-rose-500 rounded-lg hover:bg-rose-600/20 transition-colors duration-200"
                       >초기화</button>
                     </div>
                   </div>
@@ -269,113 +264,120 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
             </section>
           </div>
 
-          {/* 섹션 2: 오디오 라이브러리 */}
+          {/* Section 2: Audio Library */}
           <div className="lg:col-span-4 space-y-4 md:space-y-6">
             <section className="flex flex-col">
               <div className="flex items-center gap-3 mb-4 md:mb-5">
                 <span
-                  className="text-xs md:text-sm font-black uppercase tracking-widest px-3 py-1.5 bg-cyan-500 text-white rounded border-2 border-black"
+                  className={`text-xs font-medium tracking-wide px-3 py-1 rounded-full ${
+                    isDarkMode ? 'bg-cyan-500/15 text-cyan-400' : 'bg-cyan-50 text-cyan-600'
+                  }`}
                 >02. 오디오</span>
                 <div className="flex items-center gap-2 flex-1">
                   {assets.audioTracks.length > 0 && (
                     <button
                       onClick={copyTimeline}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs md:text-sm font-black uppercase transition-all border-black ${
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs md:text-sm font-medium transition-all duration-200 ${
                         copied
-                          ? 'bg-green-400 text-black'
-                          : 'bg-amber-400 text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px]'
+                          ? 'bg-emerald-500/15 text-emerald-400'
+                          : isDarkMode
+                            ? 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
+                            : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
                       }`}
-                      style={{ borderWidth: '2px' }}
                     >
                       {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                       {copied ? '복사됨!' : '타임라인'}
                     </button>
                   )}
-                  <span className="h-[3px] flex-1 bg-black" />
+                  <span className={`h-px flex-1 ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`} />
                 </div>
               </div>
 
               <div className="space-y-3 md:space-y-4 flex flex-col">
-                {/* 업로드 영역 - 네오브루탈 */}
+                {/* Upload Area */}
                 <div className="relative group">
                   <input
                     type="file" multiple accept="audio/*" onChange={handleAudioUpload}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                   />
                   <div
-                    className={`border-4 border-dashed rounded-lg p-5 md:p-8 text-center transition-all border-black ${
-                      isDarkMode ? 'bg-zinc-800' : 'bg-white'
-                    } group-hover:bg-lime-100`}
+                    className={`border border-dashed rounded-xl p-5 md:p-8 text-center transition-all duration-200 ${
+                      isDarkMode
+                        ? 'border-zinc-700 bg-zinc-900 group-hover:border-indigo-500/50 group-hover:bg-indigo-500/5'
+                        : 'border-zinc-300 bg-white group-hover:border-indigo-400 group-hover:bg-indigo-50/50'
+                    }`}
                   >
-                    <CloudUpload className={`w-8 md:w-10 h-8 md:h-10 mx-auto mb-2 md:mb-3 ${isDarkMode ? 'text-zinc-500' : 'text-zinc-400'}`} />
-                    <p className="text-sm md:text-base font-black uppercase tracking-[0.15em]">트랙 추가</p>
-                    <p className={`text-xs md:text-sm mt-1 uppercase font-bold ${isDarkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>WAV, MP3, FLAC</p>
+                    <CloudUpload className={`w-8 md:w-10 h-8 md:h-10 mx-auto mb-2 md:mb-3 ${isDarkMode ? 'text-zinc-600' : 'text-zinc-400'}`} />
+                    <p className={`text-sm md:text-base font-semibold ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>트랙 추가</p>
+                    <p className={`text-xs md:text-sm mt-1 ${isDarkMode ? 'text-zinc-600' : 'text-zinc-400'}`}>WAV, MP3, FLAC</p>
                   </div>
                 </div>
 
-                {/* 트랙 리스트 - 네오브루탈 */}
-                <div className="space-y-2 max-h-[200px] md:max-h-[300px] overflow-y-auto pr-1 md:pr-2 custom-scrollbar">
+                {/* Track List */}
+                <div className="space-y-1.5 max-h-[200px] md:max-h-[300px] overflow-y-auto pr-1 md:pr-2 custom-scrollbar">
                   {assets.audioTracks.map((track, index) => (
                     <div
                       key={track.id}
-                      className={`flex items-center gap-2 md:gap-3 px-3 md:px-4 py-3 md:py-4 rounded-lg transition-all border-black ${
-                        isDarkMode ? 'bg-zinc-800' : 'bg-white'
+                      className={`flex items-center gap-2 md:gap-3 px-3 md:px-4 py-3 md:py-3.5 rounded-xl transition-all duration-200 border ${
+                        isDarkMode
+                          ? 'bg-zinc-900 border-zinc-800 hover:border-zinc-700'
+                          : 'bg-white border-zinc-200 hover:border-zinc-300'
                       }`}
-                      style={{ borderWidth: '2px' }}
                     >
                       <span
-                        className="text-xs md:text-sm font-black w-7 h-7 md:w-8 md:h-8 flex items-center justify-center bg-indigo-500 text-white rounded border-2 border-black"
+                        className="text-xs md:text-sm font-semibold w-7 h-7 md:w-8 md:h-8 flex items-center justify-center bg-indigo-600 text-white rounded-lg"
                       >{String(index + 1).padStart(2, '0')}</span>
                       <div
-                        className={`w-8 h-8 md:w-10 md:h-10 rounded flex items-center justify-center flex-shrink-0 border-black ${
-                          isDarkMode ? 'bg-zinc-700' : 'bg-zinc-100'
+                        className={`w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                          isDarkMode ? 'bg-zinc-800' : 'bg-zinc-100'
                         }`}
-                        style={{ borderWidth: '2px' }}
                       >
-                        <Music className="w-4 md:w-5 h-4 md:h-5 text-pink-500" />
+                        <Music className="w-4 md:w-5 h-4 md:h-5 text-indigo-500" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm md:text-base font-black truncate pr-2">{track.file.name}</p>
+                        <p className={`text-sm md:text-base font-medium truncate pr-2 ${isDarkMode ? 'text-zinc-200' : 'text-zinc-800'}`}>{track.file.name}</p>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs md:text-sm font-black tabular-nums text-cyan-500">
+                          <span className="text-xs md:text-sm font-semibold tabular-nums text-cyan-500">
                             {formatTime(getTrackStartTime(index))}
                           </span>
-                          <span className={`text-xs ${isDarkMode ? 'text-zinc-600' : 'text-zinc-400'}`}>|</span>
-                          <span className={`text-xs md:text-sm font-bold tabular-nums ${isDarkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>
+                          <span className={`text-xs ${isDarkMode ? 'text-zinc-700' : 'text-zinc-300'}`}>/</span>
+                          <span className={`text-xs md:text-sm tabular-nums ${isDarkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>
                             {track.duration}
                           </span>
                         </div>
                       </div>
-                      {/* 순서 변경 버튼 */}
+                      {/* Reorder Buttons */}
                       <div className="flex flex-col gap-0.5">
                         <button
                           onClick={() => moveTrackUp(index)}
                           disabled={index === 0}
-                          className={`p-1.5 rounded transition-colors border-black ${
+                          className={`p-1 rounded-md transition-colors duration-200 ${
                             index === 0
-                              ? 'opacity-30'
-                              : 'bg-zinc-200 hover:bg-lime-400'
+                              ? 'opacity-20 cursor-not-allowed'
+                              : isDarkMode
+                                ? 'text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200'
+                                : 'text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700'
                           }`}
-                          style={{ borderWidth: '1px' }}
                         >
                           <ChevronUp className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => moveTrackDown(index)}
                           disabled={index === assets.audioTracks.length - 1}
-                          className={`p-1.5 rounded transition-colors border-black ${
+                          className={`p-1 rounded-md transition-colors duration-200 ${
                             index === assets.audioTracks.length - 1
-                              ? 'opacity-30'
-                              : 'bg-zinc-200 hover:bg-lime-400'
+                              ? 'opacity-20 cursor-not-allowed'
+                              : isDarkMode
+                                ? 'text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200'
+                                : 'text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700'
                           }`}
-                          style={{ borderWidth: '1px' }}
                         >
                           <ChevronDown className="w-4 h-4" />
                         </button>
                       </div>
                       <button
                         onClick={() => removeTrack(track.id)}
-                        className="p-2 md:p-2.5 bg-rose-500 text-white rounded border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all"
+                        className="p-2 md:p-2.5 text-rose-500 hover:bg-rose-500/10 rounded-lg transition-colors duration-200"
                       >
                         <Trash2 className="w-4 md:w-5 h-4 md:h-5" />
                       </button>
@@ -383,27 +385,28 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
                   ))}
                   {assets.audioTracks.length === 0 && (
                     <div
-                      className={`flex items-center justify-center py-10 md:py-14 rounded-lg border-4 border-dashed border-black ${
-                        isDarkMode ? 'bg-zinc-800' : 'bg-white'
+                      className={`flex items-center justify-center py-10 md:py-14 rounded-xl border border-dashed ${
+                        isDarkMode ? 'border-zinc-800 bg-zinc-900/50' : 'border-zinc-200 bg-white'
                       }`}
                     >
-                      <p className="text-xs md:text-sm font-black uppercase tracking-[0.2em]">트랙 없음</p>
+                      <p className={`text-xs md:text-sm font-medium ${isDarkMode ? 'text-zinc-600' : 'text-zinc-400'}`}>트랙 없음</p>
                     </div>
                   )}
                 </div>
 
-                {/* 트랙 요약 - 네오브루탈 */}
+                {/* Track Summary */}
                 {assets.audioTracks.length > 0 && (
                   <div
-                    className={`flex items-center justify-between px-4 py-3 rounded-lg border-black ${
-                      isDarkMode ? 'bg-zinc-700' : 'bg-zinc-100'
+                    className={`flex items-center justify-between px-4 py-3 rounded-xl border ${
+                      isDarkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'
                     }`}
-                    style={{ borderWidth: '2px' }}
                   >
-                    <span className="text-xs md:text-sm font-black">
+                    <span className={`text-xs md:text-sm font-medium ${isDarkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
                       {assets.audioTracks.length}개 트랙
                     </span>
-                    <span className="text-sm md:text-base font-black tabular-nums px-3 py-1 bg-lime-400 text-black rounded border-2 border-black">
+                    <span className={`text-sm md:text-base font-semibold tabular-nums px-3 py-1 rounded-lg ${
+                      isDarkMode ? 'bg-indigo-600/15 text-indigo-400' : 'bg-indigo-50 text-indigo-600'
+                    }`}>
                       {formatTime(getTotalDuration())}
                     </span>
                   </div>
@@ -412,55 +415,58 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
             </section>
           </div>
 
-          {/* 섹션 3: 인코딩 설정 */}
+          {/* Section 3: Encoding Settings */}
           <div className="lg:col-span-4 space-y-4 md:space-y-6">
             <section>
               <div className="flex items-center gap-3 mb-4 md:mb-5">
                 <span
-                  className="text-xs md:text-sm font-black uppercase tracking-widest px-3 py-1.5 bg-amber-500 text-black rounded border-2 border-black"
+                  className={`text-xs font-medium tracking-wide px-3 py-1 rounded-full ${
+                    isDarkMode ? 'bg-amber-500/15 text-amber-400' : 'bg-amber-50 text-amber-600'
+                  }`}
                 >03. 인코딩</span>
-                <span className="h-[3px] flex-1 bg-black" />
+                <span className={`h-px flex-1 ${isDarkMode ? 'bg-zinc-800' : 'bg-zinc-200'}`} />
               </div>
 
               <div
-                className={`rounded-lg p-5 md:p-7 space-y-5 md:space-y-6 border-black ${
-                  isDarkMode ? 'bg-zinc-800' : 'bg-white'
+                className={`rounded-xl p-5 md:p-7 space-y-5 md:space-y-6 border transition-colors duration-200 ${
+                  isDarkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'
                 }`}
-                style={{ borderWidth: '3px' }}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Settings2 className="w-4 md:w-5 h-4 md:h-5 text-indigo-500" />
-                    <h4 className="text-xs md:text-sm font-black uppercase tracking-wider">출력 설정</h4>
+                    <h4 className={`text-xs md:text-sm font-semibold ${isDarkMode ? 'text-zinc-200' : 'text-zinc-800'}`}>출력 설정</h4>
                   </div>
-                  <span className="text-xs md:text-sm font-black uppercase px-2 py-1 bg-zinc-200 rounded border-2 border-black">V4.1</span>
+                  <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${
+                    isDarkMode ? 'bg-zinc-800 text-zinc-400' : 'bg-zinc-100 text-zinc-500'
+                  }`}>V4.1</span>
                 </div>
 
                 <div className="space-y-4 md:space-y-5">
-                  {/* 반복 횟수 - 네오브루탈 */}
+                  {/* Repeat Count */}
                   <div
-                    className={`p-4 md:p-6 rounded-lg space-y-4 md:space-y-5 border-black ${
-                      isDarkMode ? 'bg-zinc-900' : 'bg-zinc-50'
+                    className={`p-4 md:p-6 rounded-xl space-y-4 md:space-y-5 border ${
+                      isDarkMode ? 'bg-zinc-800/50 border-zinc-800' : 'bg-zinc-50 border-zinc-100'
                     }`}
-                    style={{ borderWidth: '2px' }}
                   >
                     <div className="flex justify-between items-center">
-                      <label className="text-xs md:text-sm font-black uppercase">영상 반복</label>
-                      <span className="px-2 py-1 bg-indigo-500 text-white text-xs md:text-sm font-black rounded border-2 border-black">{assets.repeatCount}회</span>
+                      <label className={`text-xs md:text-sm font-medium ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>영상 반복</label>
+                      <span className={`px-2.5 py-1 text-xs md:text-sm font-semibold rounded-full ${
+                        isDarkMode ? 'bg-indigo-600/15 text-indigo-400' : 'bg-indigo-50 text-indigo-600'
+                      }`}>{assets.repeatCount}회</span>
                     </div>
-                    <div className="flex gap-3">
+                    <div className="flex gap-2">
                       {[1, 2, 3].map(count => (
                         <button
                           key={count}
                           onClick={() => updateAsset('repeatCount', count)}
-                          className={`flex-1 py-3 text-sm md:text-base font-black rounded transition-all border-black ${
+                          className={`flex-1 py-3 text-sm md:text-base font-semibold rounded-lg transition-all duration-200 ${
                             assets.repeatCount === count
-                              ? 'bg-cyan-400 text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]'
+                              ? 'bg-indigo-600 text-white'
                               : isDarkMode
-                                ? 'bg-zinc-700 text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-cyan-400 hover:text-black'
-                                : 'bg-white text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-cyan-100'
+                                ? 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
+                                : 'bg-white text-zinc-700 border border-zinc-200 hover:bg-zinc-100'
                           }`}
-                          style={{ borderWidth: '2px' }}
                         >
                           {count}회
                         </button>
@@ -468,30 +474,30 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
                     </div>
                   </div>
 
-                  {/* 비트레이트 - 네오브루탈 */}
+                  {/* Bitrate */}
                   <div
-                    className={`p-4 md:p-6 rounded-lg space-y-4 md:space-y-5 border-black ${
-                      isDarkMode ? 'bg-zinc-900' : 'bg-zinc-50'
+                    className={`p-4 md:p-6 rounded-xl space-y-4 md:space-y-5 border ${
+                      isDarkMode ? 'bg-zinc-800/50 border-zinc-800' : 'bg-zinc-50 border-zinc-100'
                     }`}
-                    style={{ borderWidth: '2px' }}
                   >
                     <div className="flex justify-between items-center">
-                      <label className="text-xs md:text-sm font-black uppercase">오디오 비트레이트</label>
-                      <span className="px-2 py-1 bg-lime-400 text-black text-xs md:text-sm font-black rounded border-2 border-black">{assets.bitrate.toUpperCase()}</span>
+                      <label className={`text-xs md:text-sm font-medium ${isDarkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>오디오 비트레이트</label>
+                      <span className={`px-2.5 py-1 text-xs md:text-sm font-semibold rounded-full ${
+                        isDarkMode ? 'bg-cyan-500/15 text-cyan-400' : 'bg-cyan-50 text-cyan-600'
+                      }`}>{assets.bitrate.toUpperCase()}</span>
                     </div>
-                    <div className="flex gap-3">
+                    <div className="flex gap-2">
                       {['96kbps', '128kbps', '192kbps'].map(rate => (
                         <button
                           key={rate}
                           onClick={() => updateAsset('bitrate', rate)}
-                          className={`flex-1 py-3 text-sm md:text-base font-black rounded transition-all border-black ${
+                          className={`flex-1 py-3 text-sm md:text-base font-semibold rounded-lg transition-all duration-200 ${
                             assets.bitrate === rate
-                              ? 'bg-pink-500 text-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]'
+                              ? 'bg-cyan-500 text-white'
                               : isDarkMode
-                                ? 'bg-zinc-700 text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-pink-500'
-                                : 'bg-white text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-pink-100'
+                                ? 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
+                                : 'bg-white text-zinc-700 border border-zinc-200 hover:bg-zinc-100'
                           }`}
-                          style={{ borderWidth: '2px' }}
                         >
                           {rate.split('k')[0]}K
                         </button>
@@ -500,19 +506,22 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
                   </div>
                 </div>
 
-                <div className="pt-4 md:pt-5 border-t-4 border-black">
+                <div className={`pt-4 md:pt-5 border-t ${isDarkMode ? 'border-zinc-800' : 'border-zinc-200'}`}>
                   <div
-                    className="flex items-center justify-between p-4 md:p-5 bg-lime-400 rounded-lg border-black"
-                    style={{ borderWidth: '2px' }}
+                    className={`flex items-center justify-between p-4 md:p-5 rounded-xl ${
+                      isDarkMode ? 'bg-emerald-500/10' : 'bg-emerald-50'
+                    }`}
                   >
                     <div>
-                      <p className="text-sm md:text-base font-black uppercase">GPU 가속</p>
-                      <p className="text-xs md:text-sm font-bold mt-0.5">하드웨어 렌더링</p>
+                      <p className={`text-sm md:text-base font-semibold ${isDarkMode ? 'text-emerald-400' : 'text-emerald-700'}`}>GPU 가속</p>
+                      <p className={`text-xs md:text-sm mt-0.5 ${isDarkMode ? 'text-emerald-500/60' : 'text-emerald-600/70'}`}>하드웨어 렌더링</p>
                     </div>
                     <div
-                      className="w-12 h-7 bg-white rounded border-2 border-black relative shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                      className={`w-11 h-6 rounded-full relative transition-colors duration-200 ${
+                        isDarkMode ? 'bg-emerald-500' : 'bg-emerald-500'
+                      }`}
                     >
-                      <div className="absolute right-0.5 top-0.5 w-5 h-5 bg-lime-400 rounded border-2 border-black" />
+                      <div className="absolute right-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform duration-200" />
                     </div>
                   </div>
                 </div>
@@ -523,17 +532,21 @@ const MediaCenter: React.FC<MediaCenterProps> = ({ assets, updateAsset, onEnterS
         </div>
       </div>
 
-      {/* 하단 푸터 - 네오브루탈 */}
+      {/* Footer */}
       <footer
-        className={`hidden md:flex h-14 border-t-4 border-black items-center px-6 justify-between mt-auto ${
-          isDarkMode ? 'bg-zinc-800' : 'bg-white'
+        className={`hidden md:flex h-14 border-t items-center px-6 justify-between mt-auto transition-colors duration-300 ${
+          isDarkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'
         }`}
       >
-        <div className="flex gap-4">
-          <span className="text-xs font-black uppercase px-3 py-1.5 bg-lime-400 text-black rounded border-2 border-black">준비됨</span>
-          <span className="text-xs font-black uppercase px-3 py-1.5 bg-cyan-400 text-black rounded border-2 border-black">V4.1.0</span>
+        <div className="flex gap-3">
+          <span className={`text-xs font-medium px-3 py-1.5 rounded-full ${
+            isDarkMode ? 'bg-emerald-500/15 text-emerald-400' : 'bg-emerald-50 text-emerald-600'
+          }`}>준비됨</span>
+          <span className={`text-xs font-medium px-3 py-1.5 rounded-full ${
+            isDarkMode ? 'bg-zinc-800 text-zinc-400' : 'bg-zinc-100 text-zinc-500'
+          }`}>V4.1.0</span>
         </div>
-        <p className="text-xs font-black uppercase tracking-[0.3em]">스펙트럼 비주얼라이저</p>
+        <p className={`text-xs font-medium tracking-wider ${isDarkMode ? 'text-zinc-600' : 'text-zinc-400'}`}>스펙트럼 비주얼라이저</p>
       </footer>
     </div>
   );

@@ -1,5 +1,5 @@
 
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import {
   CirclePlus,
   LayoutGrid,
@@ -18,12 +18,11 @@ interface SidebarProps {
   onExportClick: () => void;
 }
 
-// Aicrew 로고 컴포넌트
 const AicrewLogo: React.FC<{ isDarkMode: boolean }> = ({ isDarkMode }) => (
   <img
     src="/aicrew-logo.png"
     alt="Aicrew"
-    className={`w-28 h-auto object-contain transition-all ${
+    className={`w-full h-auto object-contain transition-all ${
       isDarkMode ? '' : 'invert'
     }`}
   />
@@ -37,137 +36,100 @@ const Sidebar: React.FC<SidebarProps> = ({
   onHelpClick,
   onExportClick
 }) => {
-  const adInitialized = useRef(false);
-
-  // AdSense 광고 초기화
-  useEffect(() => {
-    if (!adInitialized.current) {
-      try {
-        // @ts-ignore
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-        adInitialized.current = true;
-      } catch (e) {
-        console.log('AdSense error:', e);
-      }
-    }
-  }, []);
-
   return (
-    <aside className={`w-[180px] h-full flex flex-col pt-3 pb-6 px-4 border-r-4 transition-colors ${
+    <aside className={`w-[180px] h-full flex flex-col pt-4 pb-6 px-3 border-r transition-colors ${
       isDarkMode
-        ? 'bg-zinc-900 border-black'
-        : 'bg-amber-50 border-black'
+        ? 'bg-zinc-950 border-zinc-800'
+        : 'bg-white border-zinc-200'
     }`}>
-      {/* 로고 */}
-      <div className="mb-3 flex justify-center">
+      {/* Logo */}
+      <div className="mb-6">
         <AicrewLogo isDarkMode={isDarkMode} />
       </div>
 
-      {/* 메뉴 버튼들 - 네오브루탈 스타일 */}
-      <nav className="flex flex-col gap-3">
+      {/* Nav */}
+      <nav className="flex flex-col gap-2">
         <button
           onClick={() => setActiveTab('project')}
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg text-[13px] font-black uppercase tracking-wide transition-all border-3 ${
+          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
             activeTab === 'project'
-              ? 'bg-indigo-500 text-white border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] translate-x-0 translate-y-0 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px]'
+              ? isDarkMode
+                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20'
+                : 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20'
               : isDarkMode
-                ? 'bg-zinc-800 text-white border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-indigo-600'
-                : 'bg-white text-black border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-indigo-100'
+                ? 'text-zinc-400 hover:text-white hover:bg-zinc-800/80'
+                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'
           }`}
-          style={{ borderWidth: '3px' }}
         >
-          <CirclePlus className="w-5 h-5" />
+          <CirclePlus className="w-4 h-4" />
           프로젝트
         </button>
 
         <button
           onClick={() => setActiveTab('editor')}
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg text-[13px] font-black uppercase tracking-wide transition-all border-3 ${
+          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
             activeTab === 'editor'
-              ? 'bg-cyan-400 text-black border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] translate-x-0 translate-y-0 hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px]'
+              ? isDarkMode
+                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20'
+                : 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/20'
               : isDarkMode
-                ? 'bg-zinc-800 text-white border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-cyan-400 hover:text-black'
-                : 'bg-white text-black border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-cyan-100'
+                ? 'text-zinc-400 hover:text-white hover:bg-zinc-800/80'
+                : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100'
           }`}
-          style={{ borderWidth: '3px' }}
         >
-          <LayoutGrid className="w-5 h-5" />
+          <LayoutGrid className="w-4 h-4" />
           스튜디오
         </button>
 
         <button
           onClick={onExportClick}
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg text-[13px] font-black uppercase tracking-wide transition-all ${
+          className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
             isDarkMode
-              ? 'bg-lime-400 text-black border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px]'
-              : 'bg-lime-400 text-black border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px]'
+              ? 'text-emerald-400 hover:bg-emerald-500/10 hover:text-emerald-300'
+              : 'text-emerald-600 hover:bg-emerald-50 hover:text-emerald-700'
           }`}
-          style={{ borderWidth: '3px' }}
         >
-          <Upload className="w-5 h-5" />
+          <Upload className="w-4 h-4" />
           내보내기
         </button>
       </nav>
 
-      {/* AdSense 광고 영역 - 네오브루탈 프레임 */}
-      <div className="flex-1 flex flex-col mt-4 min-h-0">
-        <p className={`text-xs text-center mb-2 flex-shrink-0 font-black uppercase ${
-          isDarkMode ? 'text-zinc-500' : 'text-zinc-600'
-        }`}>
-          ADS
-        </p>
-        <div className={`flex-1 rounded-lg overflow-hidden min-h-[300px] max-h-[600px] border-black ${
-          isDarkMode ? 'bg-zinc-800' : 'bg-white'
-        }`}
-        style={{ borderWidth: '3px' }}
-        >
-          <ins className="adsbygoogle"
-            style={{ display: 'block', width: '100%', height: '100%' }}
-            data-ad-client="ca-pub-2764784359698938"
-            data-ad-slot="7217586018"
-            data-ad-format="vertical"
-            data-full-width-responsive="false"
-          />
-        </div>
-      </div>
+      <div className="flex-1" />
 
-      {/* 하단: 다크모드 토글 + 도움말 - 네오브루탈 스타일 */}
-      <div className={`flex items-center justify-between gap-2 pt-4 mt-4 border-t-4 ${
-        isDarkMode ? 'border-black' : 'border-black'
+      {/* Bottom controls */}
+      <div className={`flex items-center justify-between gap-2 pt-4 mt-4 border-t ${
+        isDarkMode ? 'border-zinc-800' : 'border-zinc-200'
       }`}>
-        {/* 다크모드 토글 - 네오브루탈 */}
+        {/* Dark mode toggle */}
         <button
           onClick={() => setIsDarkMode(!isDarkMode)}
-          className={`relative w-14 h-8 rounded-lg transition-colors border-black ${
-            isDarkMode ? 'bg-indigo-500' : 'bg-amber-300'
+          className={`relative w-12 h-7 rounded-full transition-colors ${
+            isDarkMode ? 'bg-indigo-600' : 'bg-zinc-300'
           }`}
-          style={{ borderWidth: '3px' }}
         >
           <div
-            className={`absolute top-0.5 w-5 h-5 rounded bg-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-transform flex items-center justify-center ${
-              isDarkMode ? 'translate-x-6' : 'translate-x-0.5'
+            className={`absolute top-0.5 w-6 h-6 rounded-full bg-white shadow-md transition-transform flex items-center justify-center ${
+              isDarkMode ? 'translate-x-5' : 'translate-x-0.5'
             }`}
           >
             {isDarkMode ? (
-              <Moon className="w-3 h-3 text-indigo-600" />
+              <Moon className="w-3.5 h-3.5 text-indigo-600" />
             ) : (
-              <Sun className="w-3 h-3 text-amber-500" />
+              <Sun className="w-3.5 h-3.5 text-amber-500" />
             )}
           </div>
         </button>
 
-        {/* 도움말 버튼 - 네오브루탈 */}
+        {/* Help */}
         <button
           onClick={onHelpClick}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-black uppercase border-black transition-all shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] ${
+          className={`p-2 rounded-lg transition-all duration-200 ${
             isDarkMode
-              ? 'bg-pink-500 text-white'
-              : 'bg-pink-400 text-black'
+              ? 'text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800'
+              : 'text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100'
           }`}
-          style={{ borderWidth: '2px' }}
         >
-          <HelpCircle className="w-4 h-4" />
-          HELP
+          <HelpCircle className="w-5 h-5" />
         </button>
       </div>
     </aside>
